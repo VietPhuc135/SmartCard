@@ -1,0 +1,644 @@
+// converted by version 1.3
+// on Wed Jun 07 20:25:34 ICT 2023
+
+.package project {
+	.aid 0x11:0x22:0x33:0x44:0x55;
+	.version 1.0;
+
+	.imports {
+		0xA0:0x0:0x0:0x0:0x62:0x0:0x1 1.0;		//java/lang
+		0xA0:0x0:0x0:0x0:0x62:0x1:0x1 1.2;		//javacard/framework
+	}
+
+	.applet {
+		0x11:0x22:0x33:0x44:0x55:0x0 demo;
+	}
+
+	.constantPool {
+		// 0
+		instanceFieldRef byte OwnerPIN/triesRemaining;
+		// 1
+		instanceFieldRef byte[] OwnerPIN/pin;
+		// 2
+		instanceFieldRef byte[] demo/id;
+		// 3
+		instanceFieldRef byte[] demo/name;
+		// 4
+		instanceFieldRef byte[] demo/birthdate;
+		// 5
+		instanceFieldRef byte demo/gender;
+		// 6
+		instanceFieldRef byte[] demo/address;
+		// 7
+		instanceFieldRef byte[] demo/phone;
+		// 8
+		instanceFieldRef byte[] demo/balance;
+		// 9
+		instanceFieldRef OwnerPIN demo/pin;
+		// 10
+		staticMethodRef 1.16.0([BS[BSS)B;		// javacard/framework/Util.arrayCompare([BS[BSS)B
+		// 11
+		staticMethodRef 1.3.0()V;		// javacard/framework/Applet.<init>()V
+		// 12
+		staticMethodRef 0.0.0()V;		// java/lang/Object.<init>()V
+		// 13
+		staticMethodRef 1.16.1([BS[BSS)S;		// javacard/framework/Util.arrayCopy([BS[BSS)S
+		// 14
+		classRef OwnerPIN;
+		// 15
+		staticFieldRef byte[] demo/DEFAULT_PIN;
+		// 16
+		staticMethodRef OwnerPIN/<init>(BB)V;
+		// 17
+		virtualMethodRef OwnerPIN/reset()V;
+		// 18
+		virtualMethodRef OwnerPIN/update([BSB)V;
+		// 19
+		classRef demo;
+		// 20
+		staticMethodRef demo/<init>()V;
+		// 21
+		virtualMethodRef 1.3.2([BSB)V;		// javacard/framework/Applet.register([BSB)V
+		// 22
+		virtualMethodRef 1.3.3()Z;		// javacard/framework/Applet.selectingApplet()Z
+		// 23
+		virtualMethodRef 1.10.1()[B;		// javacard/framework/APDU.getBuffer()[B
+		// 24
+		staticMethodRef demo/writeData([BLjavacard/framework/APDU;S)V;
+			.descriptor	Ljavacard/framework/APDU;	1.10;
+
+		// 25
+		staticMethodRef demo/readData([BLjavacard/framework/APDU;)V;
+			.descriptor	Ljavacard/framework/APDU;	1.10;
+
+		// 26
+		staticMethodRef demo/resetData()V;
+		// 27
+		staticMethodRef demo/verify(Ljavacard/framework/APDU;)V;
+			.descriptor	Ljavacard/framework/APDU;	1.10;
+
+		// 28
+		staticMethodRef demo/change(Ljavacard/framework/APDU;)V;
+			.descriptor	Ljavacard/framework/APDU;	1.10;
+
+		// 29
+		staticMethodRef 1.7.1(S)V;		// javacard/framework/ISOException.throwIt(S)V
+		// 30
+		staticMethodRef demo/sendResponse(Ljavacard/framework/APDU;[BSS)V;
+			.descriptor	Ljavacard/framework/APDU;	1.10;
+
+		// 31
+		virtualMethodRef 1.10.7()S;		// javacard/framework/APDU.setOutgoing()S
+		// 32
+		virtualMethodRef 1.10.9(S)V;		// javacard/framework/APDU.setOutgoingLength(S)V
+		// 33
+		virtualMethodRef 1.10.4(SS)V;		// javacard/framework/APDU.sendBytes(SS)V
+		// 34
+		virtualMethodRef 1.10.6()S;		// javacard/framework/APDU.setIncomingAndReceive()S
+		// 35
+		virtualMethodRef OwnerPIN/check([BSB)Z;
+		// 36
+		virtualMethodRef OwnerPIN/getTriesRemaining()B;
+	}
+
+	.class public OwnerPIN 0 extends 0.0 {		// extends java/lang/Object
+
+		.fields {
+			private byte[] pin 0;		// [B
+			private byte triesRemaining 1;		// B
+		}
+
+		.publicMethodTable 1 {
+			equals(Ljava/lang/Object;)Z;
+			update([BSB)V;
+			check([BSB)Z;
+			getTriesRemaining()B;
+			reset()V;
+		}
+
+		.packageMethodTable 0 {
+		}
+
+		.method public <init>(BB)V 0 {
+			.stack 2;
+			.locals 0;
+
+				L0:	aload_0;
+					invokespecial 12;		// java/lang/Object.<init>()V
+					aload_0;
+					sload_1;
+					putfield_b 0;		// byte project/OwnerPIN.triesRemaining
+					aload_0;
+					sload_2;
+					newarray 11;
+					putfield_a 1;		// reference project/OwnerPIN.pin
+					return;
+		}
+
+		.method public update([BSB)V 1 {
+			.stack 5;
+			.locals 0;
+
+				L0:	aload_1;
+					sload_2;
+					getfield_a_this 1;		// reference project/OwnerPIN.pin
+					sconst_0;
+					sload_3;
+					invokestatic 13;		// javacard/framework/Util.arrayCopy([BS[BSS)S
+					pop;
+					aload_0;
+					invokevirtual 17;		// project/OwnerPIN.reset()V
+					return;
+		}
+
+		.method public check([BSB)Z 2 {
+			.stack 5;
+			.locals 1;
+
+				L0:	aload_1;
+					sload_2;
+					getfield_a_this 1;		// reference project/OwnerPIN.pin
+					sconst_0;
+					sload_3;
+					invokestatic 10;		// javacard/framework/Util.arrayCompare([BS[BSS)B
+					ifne L2;
+				L1:	sconst_1;
+					goto L3;
+				L2:	sconst_0;
+				L3:	sstore 4;
+				L4:	sload 4;
+					ifne L6;
+				L5:	aload_0;
+					dup;
+					getfield_b 0;		// byte project/OwnerPIN.triesRemaining
+					sconst_1;
+					ssub;
+					s2b;
+					putfield_b 0;		// byte project/OwnerPIN.triesRemaining
+				L6:	sload 4;
+					sreturn;
+		}
+
+		.method public getTriesRemaining()B 3 {
+			.stack 1;
+			.locals 0;
+
+				L0:	getfield_b_this 0;		// byte project/OwnerPIN.triesRemaining
+					sreturn;
+		}
+
+		.method public reset()V 4 {
+			.stack 2;
+			.locals 0;
+
+				L0:	aload_0;
+					sconst_3;
+					putfield_b 0;		// byte project/OwnerPIN.triesRemaining
+					return;
+		}
+
+	}
+
+	.class public demo 1 extends 1.3 {		// extends javacard/framework/Applet
+
+		.fields {
+			private OwnerPIN pin 0;		// Lproject/OwnerPIN;
+			private byte[] id 1;		// [B
+			private byte[] name 2;		// [B
+			private byte[] birthdate 3;		// [B
+			private byte[] address 4;		// [B
+			private byte[] phone 5;		// [B
+			private byte[] balance 6;		// [B
+			private byte gender 7;		// B
+			private static final byte ID_TAG = 1;		// B
+			private static final byte NAME_TAG = 2;		// B
+			private static final byte BIRTHDATE_TAG = 3;		// B
+			private static final byte GENDER_TAG = 4;		// B
+			private static final byte ADDRESS_TAG = 5;		// B
+			private static final byte PHONE_TAG = 6;		// B
+			private static final byte BALANCE_TAG = 7;		// B
+			private static final byte[] DEFAULT_PIN = {1,2,3,4};		// [B
+			private static final byte MAX_PIN_TRIES = 3;		// B
+			private static final short SW_INVALID_LENGTH = 27268;		// S
+			private static final short SW_INVALID_TAG = 27264;		// S
+			private static final short SW_RECORD_NOT_FOUND = 27267;		// S
+		}
+
+		.publicMethodTable 7 {
+			equals(Ljava/lang/Object;)Z;
+			register()V;
+			register([BSB)V;
+			selectingApplet()Z;
+			deselect()V;
+			getShareableInterfaceObject(Ljavacard/framework/AID;B)Ljavacard/framework/Shareable;;
+			select()Z;
+			process(Ljavacard/framework/APDU;)V;
+		}
+
+		.packageMethodTable 0 {
+		}
+
+		.method public <init>()V 0 {
+			.stack 5;
+			.locals 0;
+
+				L0:	aload_0;
+					invokespecial 11;		// javacard/framework/Applet.<init>()V
+					aload_0;
+					bspush 10;
+					newarray 11;
+					putfield_a 2;		// reference project/demo.id
+					aload_0;
+					bspush 50;
+					newarray 11;
+					putfield_a 3;		// reference project/demo.name
+					aload_0;
+					bspush 6;
+					newarray 11;
+					putfield_a 4;		// reference project/demo.birthdate
+					aload_0;
+					sconst_0;
+					putfield_b 5;		// byte project/demo.gender
+					aload_0;
+					bspush 100;
+					newarray 11;
+					putfield_a 6;		// reference project/demo.address
+					aload_0;
+					bspush 11;
+					newarray 11;
+					putfield_a 7;		// reference project/demo.phone
+					aload_0;
+					sconst_4;
+					newarray 11;
+					putfield_a 8;		// reference project/demo.balance
+					aload_0;
+					new 14;		// project/OwnerPIN
+					dup;
+					sconst_3;
+					getstatic_a 15;		// reference project/demo.DEFAULT_PIN
+					arraylength;
+					s2b;
+					invokespecial 16;		// project/OwnerPIN.<init>(BB)V
+					putfield_a 9;		// reference project/demo.pin
+					getfield_a_this 9;		// reference project/demo.pin
+					getstatic_a 15;		// reference project/demo.DEFAULT_PIN
+					sconst_0;
+					getstatic_a 15;		// reference project/demo.DEFAULT_PIN
+					arraylength;
+					s2b;
+					invokevirtual 18;		// project/OwnerPIN.update([BSB)V
+					return;
+		}
+
+		.method public static install([BSB)V 1 {
+			.stack 5;
+			.locals 0;
+
+				L0:	new 19;		// project/demo
+					dup;
+					invokespecial 20;		// project/demo.<init>()V
+					aload_0;
+					sload_1;
+					sconst_1;
+					sadd;
+					aload_0;
+					sload_1;
+					baload;
+					invokevirtual 21;		// javacard/framework/Applet.register([BSB)V
+					return;
+		}
+
+		.method public process(Ljavacard/framework/APDU;)V 7 {
+			.stack 4;
+			.locals 2;
+
+			.descriptor	Ljavacard/framework/APDU;	1.10;
+
+				L0:	aload_0;
+					invokevirtual 22;		// javacard/framework/Applet.selectingApplet()Z
+					ifeq L2;
+				L1:	return;
+				L2:	aload_1;
+					invokevirtual 23;		// javacard/framework/APDU.getBuffer()[B
+					astore_2;
+				L3:	aload_2;
+					sconst_4;
+					baload;
+					sspush 255;
+					sand;
+					sstore_3;
+				L4:	aload_2;
+					sconst_1;
+					baload;
+					stableswitch L10 1 5 L5 L6 L7 L8 L9;
+				L5:	aload_0;
+					aload_2;
+					aload_1;
+					sload_3;
+					invokespecial 24;		// project/demo.writeData([BLjavacard/framework/APDU;S)V
+					goto L11;
+				L6:	aload_0;
+					aload_2;
+					aload_1;
+					invokespecial 25;		// project/demo.readData([BLjavacard/framework/APDU;)V
+					goto L11;
+				L7:	aload_0;
+					invokespecial 26;		// project/demo.resetData()V
+					goto L11;
+				L8:	aload_0;
+					aload_1;
+					invokespecial 27;		// project/demo.verify(Ljavacard/framework/APDU;)V
+					goto L11;
+				L9:	aload_0;
+					aload_1;
+					invokespecial 28;		// project/demo.change(Ljavacard/framework/APDU;)V
+					goto L11;
+				L10:	sspush 27904;
+					invokestatic 29;		// javacard/framework/ISOException.throwIt(S)V
+				L11:	return;
+		}
+
+		.method private writeData([BLjavacard/framework/APDU;S)V {
+			.stack 5;
+			.locals 2;
+
+			.descriptor	Ljavacard/framework/APDU;	1.10;
+
+				L0:	aload_1;
+					sconst_2;
+					baload;
+					sstore 4;
+				L1:	sconst_5;
+					sstore 5;
+				L2:	sload_3;
+					sspush 255;
+					if_scmple L4;
+				L3:	sspush 27268;
+					invokestatic 29;		// javacard/framework/ISOException.throwIt(S)V
+				L4:	sload 4;
+					stableswitch L12 1 7 L5 L6 L7 L8 L9 L10 L11;
+				L5:	aload_1;
+					sload 5;
+					getfield_a_this 2;		// reference project/demo.id
+					sconst_0;
+					sload_3;
+					invokestatic 13;		// javacard/framework/Util.arrayCopy([BS[BSS)S
+					pop;
+					goto L13;
+				L6:	aload_1;
+					sload 5;
+					getfield_a_this 3;		// reference project/demo.name
+					sconst_0;
+					sload_3;
+					invokestatic 13;		// javacard/framework/Util.arrayCopy([BS[BSS)S
+					pop;
+					goto L13;
+				L7:	aload_1;
+					sload 5;
+					getfield_a_this 4;		// reference project/demo.birthdate
+					sconst_0;
+					sload_3;
+					invokestatic 13;		// javacard/framework/Util.arrayCopy([BS[BSS)S
+					pop;
+					goto L13;
+				L8:	aload_0;
+					aload_1;
+					sload 5;
+					baload;
+					putfield_b 5;		// byte project/demo.gender
+					goto L13;
+				L9:	aload_1;
+					sload 5;
+					getfield_a_this 6;		// reference project/demo.address
+					sconst_0;
+					sload_3;
+					invokestatic 13;		// javacard/framework/Util.arrayCopy([BS[BSS)S
+					pop;
+					goto L13;
+				L10:	aload_1;
+					sload 5;
+					getfield_a_this 7;		// reference project/demo.phone
+					sconst_0;
+					sload_3;
+					invokestatic 13;		// javacard/framework/Util.arrayCopy([BS[BSS)S
+					pop;
+					goto L13;
+				L11:	aload_1;
+					sload 5;
+					getfield_a_this 8;		// reference project/demo.balance
+					sconst_0;
+					sload_3;
+					invokestatic 13;		// javacard/framework/Util.arrayCopy([BS[BSS)S
+					pop;
+					goto L13;
+				L12:	sspush 27264;
+					invokestatic 29;		// javacard/framework/ISOException.throwIt(S)V
+				L13:	return;
+		}
+
+		.method private readData([BLjavacard/framework/APDU;)V {
+			.stack 6;
+			.locals 1;
+
+			.descriptor	Ljavacard/framework/APDU;	1.10;
+
+				L0:	aload_1;
+					sconst_2;
+					baload;
+					sstore_3;
+				L1:	sload_3;
+					stableswitch L9 1 7 L2 L3 L4 L5 L6 L7 L8;
+				L2:	aload_0;
+					aload_2;
+					getfield_a_this 2;		// reference project/demo.id
+					sconst_0;
+					getfield_a_this 2;		// reference project/demo.id
+					arraylength;
+					invokespecial 30;		// project/demo.sendResponse(Ljavacard/framework/APDU;[BSS)V
+					goto L10;
+				L3:	aload_0;
+					aload_2;
+					getfield_a_this 3;		// reference project/demo.name
+					sconst_0;
+					getfield_a_this 3;		// reference project/demo.name
+					arraylength;
+					invokespecial 30;		// project/demo.sendResponse(Ljavacard/framework/APDU;[BSS)V
+					goto L10;
+				L4:	aload_0;
+					aload_2;
+					getfield_a_this 4;		// reference project/demo.birthdate
+					sconst_0;
+					getfield_a_this 4;		// reference project/demo.birthdate
+					arraylength;
+					invokespecial 30;		// project/demo.sendResponse(Ljavacard/framework/APDU;[BSS)V
+					goto L10;
+				L5:	aload_0;
+					aload_2;
+					sconst_1;
+					newarray 11;
+					dup;
+					sconst_0;
+					getfield_b_this 5;		// byte project/demo.gender
+					bastore;
+					sconst_0;
+					sconst_1;
+					invokespecial 30;		// project/demo.sendResponse(Ljavacard/framework/APDU;[BSS)V
+					goto L10;
+				L6:	aload_0;
+					aload_2;
+					getfield_a_this 6;		// reference project/demo.address
+					sconst_0;
+					getfield_a_this 6;		// reference project/demo.address
+					arraylength;
+					invokespecial 30;		// project/demo.sendResponse(Ljavacard/framework/APDU;[BSS)V
+					goto L10;
+				L7:	aload_0;
+					aload_2;
+					getfield_a_this 7;		// reference project/demo.phone
+					sconst_0;
+					getfield_a_this 7;		// reference project/demo.phone
+					arraylength;
+					invokespecial 30;		// project/demo.sendResponse(Ljavacard/framework/APDU;[BSS)V
+					goto L10;
+				L8:	aload_0;
+					aload_2;
+					getfield_a_this 8;		// reference project/demo.balance
+					sconst_0;
+					getfield_a_this 8;		// reference project/demo.balance
+					arraylength;
+					invokespecial 30;		// project/demo.sendResponse(Ljavacard/framework/APDU;[BSS)V
+					goto L10;
+				L9:	sspush 27267;
+					invokestatic 29;		// javacard/framework/ISOException.throwIt(S)V
+				L10:	return;
+		}
+
+		.method private sendResponse(Ljavacard/framework/APDU;[BSS)V {
+			.stack 5;
+			.locals 2;
+
+			.descriptor	Ljavacard/framework/APDU;	1.10;
+
+				L0:	aload_1;
+					invokevirtual 23;		// javacard/framework/APDU.getBuffer()[B
+					astore 5;
+				L1:	aload_1;
+					invokevirtual 31;		// javacard/framework/APDU.setOutgoing()S
+					sstore 6;
+				L2:	sload 4;
+					sload 6;
+					if_scmple L4;
+				L3:	sspush 26368;
+					invokestatic 29;		// javacard/framework/ISOException.throwIt(S)V
+				L4:	aload_2;
+					sload_3;
+					aload 5;
+					sconst_0;
+					sload 4;
+					invokestatic 13;		// javacard/framework/Util.arrayCopy([BS[BSS)S
+					pop;
+					aload_1;
+					sload 4;
+					invokevirtual 32;		// javacard/framework/APDU.setOutgoingLength(S)V
+					aload_1;
+					sconst_0;
+					sload 4;
+					invokevirtual 33;		// javacard/framework/APDU.sendBytes(SS)V
+					return;
+		}
+
+		.method private resetData()V {
+			.stack 2;
+			.locals 0;
+
+				L0:	aload_0;
+					bspush 10;
+					newarray 11;
+					putfield_a 2;		// reference project/demo.id
+					aload_0;
+					bspush 50;
+					newarray 11;
+					putfield_a 3;		// reference project/demo.name
+					aload_0;
+					bspush 6;
+					newarray 11;
+					putfield_a 4;		// reference project/demo.birthdate
+					aload_0;
+					sconst_0;
+					putfield_b 5;		// byte project/demo.gender
+					aload_0;
+					bspush 100;
+					newarray 11;
+					putfield_a 6;		// reference project/demo.address
+					aload_0;
+					bspush 11;
+					newarray 11;
+					putfield_a 7;		// reference project/demo.phone
+					aload_0;
+					sconst_4;
+					newarray 11;
+					putfield_a 8;		// reference project/demo.balance
+					return;
+		}
+
+		.method private verify(Ljavacard/framework/APDU;)V {
+			.stack 4;
+			.locals 2;
+
+			.descriptor	Ljavacard/framework/APDU;	1.10;
+
+				L0:	aload_1;
+					invokevirtual 23;		// javacard/framework/APDU.getBuffer()[B
+					astore_2;
+				L1:	aload_1;
+					invokevirtual 34;		// javacard/framework/APDU.setIncomingAndReceive()S
+					s2b;
+					sstore_3;
+				L2:	getfield_a_this 9;		// reference project/demo.pin
+					aload_2;
+					sconst_5;
+					sload_3;
+					invokevirtual 35;		// project/OwnerPIN.check([BSB)Z
+					ifeq L4;
+				L3:	sspush -28672;
+					invokestatic 29;		// javacard/framework/ISOException.throwIt(S)V
+					goto L5;
+				L4:	sspush 25536;
+					getfield_a_this 9;		// reference project/demo.pin
+					invokevirtual 36;		// project/OwnerPIN.getTriesRemaining()B
+					sadd;
+					invokestatic 29;		// javacard/framework/ISOException.throwIt(S)V
+				L5:	return;
+		}
+
+		.method private change(Ljavacard/framework/APDU;)V {
+			.stack 4;
+			.locals 2;
+
+			.descriptor	Ljavacard/framework/APDU;	1.10;
+
+				L0:	aload_1;
+					invokevirtual 23;		// javacard/framework/APDU.getBuffer()[B
+					astore_2;
+				L1:	aload_1;
+					invokevirtual 34;		// javacard/framework/APDU.setIncomingAndReceive()S
+					s2b;
+					sstore_3;
+				L2:	sload_3;
+					sconst_4;
+					if_scmpeq L4;
+				L3:	sspush 26368;
+					invokestatic 29;		// javacard/framework/ISOException.throwIt(S)V
+				L4:	getfield_a_this 9;		// reference project/demo.pin
+					aload_2;
+					sconst_5;
+					sload_3;
+					invokevirtual 18;		// project/OwnerPIN.update([BSB)V
+					sspush -28672;
+					invokestatic 29;		// javacard/framework/ISOException.throwIt(S)V
+					return;
+		}
+
+	}
+
+}
