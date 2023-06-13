@@ -1,9 +1,15 @@
 package project;
 
 import javacard.framework.*;
+import javacardx.crypto.Cipher;
+import javacard.security.*;
 
 public class demo extends Applet
-{
+{	
+	//ma hoa
+	private Cipher cipher;
+	private AESKey key;
+	
 	// Các tag c s dng  xác nh loi thông tin cn lu tr hoc truy xut
     private static final byte ID_TAG = 0x01;
     private static final byte NAME_TAG = 0x02;
@@ -15,6 +21,7 @@ public class demo extends Applet
     
     private static final byte[] DEFAULT_PIN = {0x01, 0x02, 0x03, 0x04}; // mã PIN mc nh
     private static final byte MAX_PIN_TRIES = 3; // s ln nhp sai cho phép
+	private byte[] tempBuffer;
 
     private OwnerPIN pin; // i tng OwnerPIN  lu tr và qun lý PIN
 
@@ -41,13 +48,16 @@ public class demo extends Applet
         address = new byte[100];
         phone = new byte[11];
         balance = new byte[4];
-        
+        tempBuffer = JCSystem.makeTransientByteArray((short) 50, JCSystem.CLEAR_ON_RESET);
+
         // to mi i tng OwnerPIN
         pin = new OwnerPIN(MAX_PIN_TRIES, (byte) DEFAULT_PIN.length);
 
         // t giá tr mc nh cho PIN
         pin.update(DEFAULT_PIN, (short) 0, (byte) DEFAULT_PIN.length);
-    }
+        cipher = Cipher.getInstance(Cipher.ALG_AES_BLOCK_128_ECB_NOPAD,false);
+        key = (AESKey)KeyBuilder.buildKey(KeyBuilder.TYPE_AES,KeyBuilder.LENGTH_AES_128, false) ;
+  }
 
 	public static void install(byte[] bArray, short bOffset, byte bLength) 
 	{
@@ -103,10 +113,31 @@ public class demo extends Applet
         // Ghi d liu vào bin tng ng
         switch (tag) {
             case ID_TAG:
-                Util.arrayCopy(buffer, offset, id, (short)0, lc);
+				// Util.arrayCopy(buffer, offset, id, (short)0, lc);
+				Util.arrayCopy(buffer, offset, tempBuffer, (short) 0, lc);
+				cipher.init(key,Cipher.MODE_ENCRYPT );
+				cipher.doFinal(tempBuffer, (short) 0, lc, tempBuffer, (short) 0);
+				
+				// copy tempBuffer vào id
+				Util.arrayCopy(tempBuffer, (short) 0, id, (short) 0, lc);
+				
+				//delete tempBuffer
+				Util.arrayFillNonAtomic(tempBuffer, (short) 0, lc, (byte) 0x00);
+
+
                 break;
             case NAME_TAG:
-                Util.arrayCopy(buffer, offset, name, (short)0, lc);
+            	// Util.arrayCopy(buffer, offset, name, (short) 0, lc);
+            		Util.arrayCopy(buffer, offset, tempBuffer, (short) 0, lc);
+				cipher.init(key,Cipher.MODE_ENCRYPT );
+				cipher.doFinal(tempBuffer, (short) 0, lc, tempBuffer, (short) 0);
+				
+				// copy tempBuffer vào id
+				Util.arrayCopy(tempBuffer, (short) 0, name, (short) 0, lc);
+				
+				//delete tempBuffer
+				Util.arrayFillNonAtomic(tempBuffer, (short) 0, lc, (byte) 0x00);
+
                 break;
             case BIRTHDATE_TAG:
                 Util.arrayCopy(buffer, offset, birthdate, (short)0, lc);
@@ -125,11 +156,13 @@ public class demo extends Applet
 				break;
 			default:
 				// Nu tag không hp l, gi mã li tr v
+
 				ISOException.throwIt(SW_INVALID_TAG);
 		}
+	
 	}
 	
-    // X lý lnh READ DATA
+    // X lý lnh READ DATAs
     private void readData(byte[] buffer, APDU apdu) {
         byte tag = buffer[ISO7816.OFFSET_P1];
 
@@ -141,6 +174,7 @@ public class demo extends Applet
             case NAME_TAG:
                 sendResponse(apdu, name, (short)0, (short)name.length);
                 break;
+
             case BIRTHDATE_TAG:
                 sendResponse(apdu, birthdate, (short)0, (short)birthdate.length);
                 break;
@@ -160,6 +194,11 @@ public class demo extends Applet
                 // Nu tag không hp l, gi mã li tr v
                 ISOException.throwIt(SW_RECORD_NOT_FOUND);
         }
+         // Giai ma
+        // if (tag == ID_TAG || tag == NAME_TAG) {
+            // cipher.init(pin, Cipher.MODE_DECRYPT);
+            // cipher.doFinal(buffer, ISO7816.OFFSET_CDATA, (short) buffer.length, buffer, ISO7816.OFFSET_CDATA);
+        // }
     }
 
     // Phng thc gi d liu tr v
