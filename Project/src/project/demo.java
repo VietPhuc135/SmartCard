@@ -41,7 +41,7 @@ public class demo extends Applet
 
     // Phng thc khi to
     public demo() {
-        id = new byte[10];
+        id = new byte[4];
         name = new byte[50];
         birthdate = new byte[6];
         gender = 0;
@@ -104,59 +104,98 @@ public class demo extends Applet
     private void writeData(byte[] buffer, APDU apdu, short lc) {
         byte tag = buffer[ISO7816.OFFSET_P1];
         short offset = ISO7816.OFFSET_CDATA;
+        
+        short byteRead = (short) (apdu.setIncomingAndReceive());
 
         // Kim tra  dài d liu
         if (lc > 255) {
             ISOException.throwIt(SW_INVALID_LENGTH);
         }
+        
+        short pointer = 0;
 
         // Ghi d liu vào bin tng ng
         switch (tag) {
             case ID_TAG:
 				// Util.arrayCopy(buffer, offset, id, (short)0, lc);
-				Util.arrayCopy(buffer, offset, tempBuffer, (short) 0, lc);
-				cipher.init(key,Cipher.MODE_ENCRYPT );
-				cipher.doFinal(tempBuffer, (short) 0, lc, tempBuffer, (short) 0);
+				while(lc > 0){
+					Util.arrayCopy(buffer, offset, id, pointer, byteRead);
+					pointer += byteRead;
+					lc -= byteRead;
+					byteRead = apdu.receiveBytes(ISO7816.OFFSET_CDATA);
+				}
+				// //Util.arrayCopy(buffer, offset, tempBuffer, (short) 0, lc);
+				// cipher.init(key,Cipher.MODE_ENCRYPT );
+				// cipher.doFinal(tempBuffer, (short) 0, lc, tempBuffer, (short) 0);
 				
-				// copy tempBuffer vào id
-				Util.arrayCopy(tempBuffer, (short) 0, id, (short) 0, lc);
+				// // copy tempBuffer vào id
+				// Util.arrayCopy(tempBuffer, (short) 0, id, (short) 0, lc);
 				
-				//delete tempBuffer
-				Util.arrayFillNonAtomic(tempBuffer, (short) 0, lc, (byte) 0x00);
+				// //delete tempBuffer
+				// Util.arrayFillNonAtomic(tempBuffer, (short) 0, lc, (byte) 0x00);
 
 
                 break;
             case NAME_TAG:
-            	// Util.arrayCopy(buffer, offset, name, (short) 0, lc);
-            		Util.arrayCopy(buffer, offset, tempBuffer, (short) 0, lc);
-				cipher.init(key,Cipher.MODE_ENCRYPT );
-				cipher.doFinal(tempBuffer, (short) 0, lc, tempBuffer, (short) 0);
+            	//Util.arrayCopy(buffer, offset, name, (short) 0, lc);
+				while(lc > 0){
+					Util.arrayCopy(buffer, offset, name, pointer, byteRead);
+					pointer += byteRead;
+					lc -= byteRead;
+					byteRead = apdu.receiveBytes(ISO7816.OFFSET_CDATA);
+				}
+            		// Util.arrayCopy(buffer, offset, tempBuffer, (short) 0, lc);
+				// cipher.init(key,Cipher.MODE_ENCRYPT );
+				// cipher.doFinal(tempBuffer, (short) 0, lc, tempBuffer, (short) 0);
 				
-				// copy tempBuffer vào id
-				Util.arrayCopy(tempBuffer, (short) 0, name, (short) 0, lc);
+				// // copy tempBuffer vào id
+				// Util.arrayCopy(tempBuffer, (short) 0, name, (short) 0, lc);
 				
-				//delete tempBuffer
-				Util.arrayFillNonAtomic(tempBuffer, (short) 0, lc, (byte) 0x00);
+				// //delete tempBuffer
+				// Util.arrayFillNonAtomic(tempBuffer, (short) 0, lc, (byte) 0x00);
 
                 break;
             case BIRTHDATE_TAG:
-                Util.arrayCopy(buffer, offset, birthdate, (short)0, lc);
+                //Util.arrayCopy(buffer, offset, birthdate, (short)0, lc);
+                while(lc > 0){
+					Util.arrayCopy(buffer, offset, birthdate, pointer, byteRead);
+					pointer += byteRead;
+					lc -= byteRead;
+					byteRead = apdu.receiveBytes(ISO7816.OFFSET_CDATA);
+				}
                 break;
             case GENDER_TAG:
                 gender = buffer[offset];
                 break;
             case ADDRESS_TAG:
-                Util.arrayCopy(buffer, offset, address, (short)0, lc);
+                //Util.arrayCopy(buffer, offset, address, (short)0, lc);
+                while(lc > 0){
+					Util.arrayCopy(buffer, offset, address, pointer, byteRead);
+					pointer += byteRead;
+					lc -= byteRead;
+					byteRead = apdu.receiveBytes(ISO7816.OFFSET_CDATA);
+				}
                 break;
             case PHONE_TAG:
-                Util.arrayCopy(buffer, offset, phone, (short)0, lc);
+                //Util.arrayCopy(buffer, offset, phone, (short)0, lc);
+                while(lc > 0){
+					Util.arrayCopy(buffer, offset, phone, pointer, byteRead);
+					pointer += byteRead;
+					lc -= byteRead;
+					byteRead = apdu.receiveBytes(ISO7816.OFFSET_CDATA);
+				}
 				break;
 			case BALANCE_TAG:
-				Util.arrayCopy(buffer, offset, balance, (short)0, lc);
+				//Util.arrayCopy(buffer, offset, balance, (short)0, lc);
+				while(lc > 0){
+					Util.arrayCopy(buffer, offset, balance, pointer, byteRead);
+					pointer += byteRead;
+					lc -= byteRead;
+					byteRead = apdu.receiveBytes(ISO7816.OFFSET_CDATA);
+				}
 				break;
 			default:
 				// Nu tag không hp l, gi mã li tr v
-
 				ISOException.throwIt(SW_INVALID_TAG);
 		}
 	
@@ -220,7 +259,7 @@ public class demo extends Applet
 	
 	// Phng thc RESET
 	private void resetData() {
-		id = new byte[10];
+		id = new byte[4];
 		name = new byte[50];
 		birthdate = new byte[6];
 		gender = 0;
