@@ -45,13 +45,13 @@ public class demo extends Applet
 
     // Phng thc khi to
     public demo() {
-        id = new byte[4];
+        id = new byte[16];
         name = new byte[50];
-        birthdate = new byte[6];
+        birthdate = new byte[16];
         gender = 0;
         address = new byte[100];
-        phone = new byte[11];
-        balance = new byte[4];
+        phone = new byte[16];
+        balance = new byte[16];
         tempBuffer = JCSystem.makeTransientByteArray((short) 50, JCSystem.CLEAR_ON_RESET);
 
         // to mi i tng OwnerPIN
@@ -59,9 +59,9 @@ public class demo extends Applet
 
         // t giá tr mc nh cho PIN
         pin.update(DEFAULT_PIN, (short) 0, (byte) DEFAULT_PIN.length);
-        // cipher = Cipher.getInstance(Cipher.ALG_AES_BLOCK_128_ECB_NOPAD,false);
-        // key = (AESKey)KeyBuilder.buildKey(KeyBuilder.TYPE_AES,KeyBuilder.LENGTH_AES_128, false) ;
-       keyLen = (short)(KeyBuilder.LENGTH_AES_128/8);
+        
+        //mã hóa
+        keyLen = (short)(KeyBuilder.LENGTH_AES_128/8);
        
 		in = new byte[keyLen];
 		enc_buffer = new byte[keyLen];
@@ -138,43 +138,36 @@ public class demo extends Applet
             case ID_TAG:
 				// Util.arrayCopy(buffer, offset, id, (short)0, lc);
 				while(lc > 0){
-							byte[] bufi = apdu.getBuffer();			
+					byte[] bufi = apdu.getBuffer();			
 					Util.arrayCopy(buffer, offset, bufi, pointer, byteRead);
 					pointer += byteRead;
 					lc -= byteRead;
 					byteRead = apdu.receiveBytes(ISO7816.OFFSET_CDATA);
+				
+					cipher.init(aesKey,Cipher.MODE_ENCRYPT);
+					cipher.doFinal(bufi,(short)0,keyLen,enc_buffer,(short)0);
+					Util.arrayCopy(enc_buffer,(short)0,id,(short)0,keyLen);
+					
+					Util.arrayFillNonAtomic(enc_buffer, (short) 0, byteRead, (byte) 0x00);
 				}
-				cipher.init(aesKey,Cipher.MODE_ENCRYPT);
-			cipher.doFinal(bufi,(short)0,keyLen,enc_buffer,(short)0);byteRead
-			Util.arrayCopy(enc_buffer,(short)0,id,(short)0,keyLen);
-			
-        Util.arrayFillNonAtomic(enc_buffer, (short) 0, byteRead, (byte) 0x00);
-
 
                 break;
             case NAME_TAG:
             	//Util.arrayCopy(buffer, offset, name, (short) 0, lc);
 				while(lc > 0){
 					byte[] buf = apdu.getBuffer();
-					Util.arrayCopy(buffer, offset, buf, pointer, );
+					Util.arrayCopy(buffer, offset, buf, pointer, byteRead);
 					pointer += byteRead;
 					lc -= byteRead;
 					byteRead = apdu.receiveBytes(ISO7816.OFFSET_CDATA);
-		  // cipher.doFinal(name, (short)0, keyLen,tempBuffer , (short) 0);
-
-        // // Cpoy tempBuffer vào name
-			// Util.arrayCopy(tempBuffer, (short) 0, name, (short) 0, byteRead);
-
-        // // del tempBuffer
         
-			cipher.init(aesKey,Cipher.MODE_ENCRYPT);
-			cipher.doFinal(buf,(short)0,keyLen,enc_buffer,(short)0);
-			Util.arrayCopy(enc_buffer,(short)0,name,(short)0,keyLen);
-			
-        Util.arrayFillNonAtomic(enc_buffer, (short) 0, byteRead, (byte) 0x00);
-  	}
-			
-
+					cipher.init(aesKey,Cipher.MODE_ENCRYPT);
+					cipher.doFinal(buf,(short)0,keyLen,enc_buffer,(short)0);
+					Util.arrayCopy(enc_buffer,(short)0,name,(short)0,keyLen);
+					
+					Util.arrayFillNonAtomic(enc_buffer, (short) 0, byteRead, (byte) 0x00);
+				}
+				
                 break;
             case BIRTHDATE_TAG:
                 //Util.arrayCopy(buffer, offset, birthdate, (short)0, lc);
@@ -184,11 +177,12 @@ public class demo extends Applet
 					pointer += byteRead;
 					lc -= byteRead;
 					byteRead = apdu.receiveBytes(ISO7816.OFFSET_CDATA);
-						cipher.init(aesKey,Cipher.MODE_ENCRYPT);
-			cipher.doFinal(bufd,(short)0,keyLen,enc_buffer,(short)0);byteRead
-			Util.arrayCopy(enc_buffer,(short)0,birthdate,(short)0,keyLen);
-			
-        Util.arrayFillNonAtomic(enc_buffer, (short) 0, byteRead, (byte) 0x00);
+					
+					cipher.init(aesKey,Cipher.MODE_ENCRYPT);
+					cipher.doFinal(bufd,(short)0,keyLen,enc_buffer,(short)0);
+					Util.arrayCopy(enc_buffer,(short)0,birthdate,(short)0,keyLen);
+					
+					Util.arrayFillNonAtomic(enc_buffer, (short) 0, byteRead, (byte) 0x00);
 				}
                 break;
             case GENDER_TAG:
@@ -203,11 +197,11 @@ public class demo extends Applet
 					lc -= byteRead;
 					byteRead = apdu.receiveBytes(ISO7816.OFFSET_CDATA);
 					
-						cipher.init(aesKey,Cipher.MODE_ENCRYPT);
-			cipher.doFinal(bufa,(short)0,keyLen,enc_buffer,(short)0);byteRead
-			Util.arrayCopy(enc_buffer,(short)0,address,(short)0,keyLen);
-			
-        Util.arrayFillNonAtomic(enc_buffer, (short) 0, byteRead, (byte) 0x00);
+					cipher.init(aesKey,Cipher.MODE_ENCRYPT);
+					cipher.doFinal(bufa,(short)0,keyLen,enc_buffer,(short)0);
+					Util.arrayCopy(enc_buffer,(short)0,address,(short)0,keyLen);
+					
+					Util.arrayFillNonAtomic(enc_buffer, (short) 0, byteRead, (byte) 0x00);
 				}
                 break;
             case PHONE_TAG:
@@ -218,11 +212,12 @@ public class demo extends Applet
 					pointer += byteRead;
 					lc -= byteRead;
 					byteRead = apdu.receiveBytes(ISO7816.OFFSET_CDATA);
-			cipher.init(aesKey,Cipher.MODE_ENCRYPT);
-			cipher.doFinal(bufp,(short)0,keyLen,enc_buffer,(short)0);byteRead
-			Util.arrayCopy(enc_buffer,(short)0,phone,(short)0,keyLen);
-			
-        Util.arrayFillNonAtomic(enc_buffer, (short) 0, byteRead, (byte) 0x00);
+					
+					cipher.init(aesKey,Cipher.MODE_ENCRYPT);
+					cipher.doFinal(bufp,(short)0,keyLen,enc_buffer,(short)0);
+					Util.arrayCopy(enc_buffer,(short)0,phone,(short)0,keyLen);
+					
+					Util.arrayFillNonAtomic(enc_buffer, (short) 0, byteRead, (byte) 0x00);
 				}
 				break;
 			case BALANCE_TAG:
@@ -233,11 +228,12 @@ public class demo extends Applet
 					pointer += byteRead;
 					lc -= byteRead;
 					byteRead = apdu.receiveBytes(ISO7816.OFFSET_CDATA);
-			cipher.init(aesKey,Cipher.MODE_ENCRYPT);
-			cipher.doFinal(bufb,(short)0,keyLen,enc_buffer,(short)0);byteRead
-			Util.arrayCopy(enc_buffer,(short)0,balance,(short)0,keyLen);
-			
-        Util.arrayFillNonAtomic(enc_buffer, (short) 0, byteRead, (byte) 0x00);
+					
+					cipher.init(aesKey,Cipher.MODE_ENCRYPT);
+					cipher.doFinal(bufb,(short)0,keyLen,enc_buffer,(short)0);
+					Util.arrayCopy(enc_buffer,(short)0,balance,(short)0,keyLen);
+					
+					Util.arrayFillNonAtomic(enc_buffer, (short) 0, byteRead, (byte) 0x00);
 				}
 				break;
 			default:
@@ -259,7 +255,6 @@ public class demo extends Applet
             case NAME_TAG:
                 sendResponse(apdu, name, (short)0, (short)name.length);
                 break;
-
             case BIRTHDATE_TAG:
                 sendResponse(apdu, birthdate, (short)0, (short)birthdate.length);
                 break;
@@ -305,13 +300,13 @@ public class demo extends Applet
 	
 	// Phng thc RESET
 	private void resetData() {
-		id = new byte[4];
+		id = new byte[16];
 		name = new byte[50];
-		birthdate = new byte[6];
+		birthdate = new byte[16];
 		gender = 0;
 		address = new byte[100];
-		phone = new byte[11];
-		balance = new byte[4];
+		phone = new byte[16];
+		balance = new byte[16];
 	}
 
 	// Kim tra mã PIN
