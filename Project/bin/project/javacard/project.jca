@@ -1,5 +1,5 @@
 // converted by version 1.3
-// on Sat Jun 17 00:42:07 ICT 2023
+// on Sat Jun 17 16:43:55 ICT 2023
 
 .package project {
 	.aid 0x11:0x22:0x33:0x44:0x55;
@@ -1432,15 +1432,19 @@
 					sconst_5;
 					getfield_a_this 18;		// reference project/rsa.sig_buffer
 					sconst_0;
-					sload_3;
+					getfield_s_this 17;		// short project/rsa.sigLen
 					invokestatic 78;		// javacard/framework/Util.arrayCopyNonAtomic([BS[BSS)S
 					pop;
+					sload_3;
+					getfield_s_this 17;		// short project/rsa.sigLen
+					ssub;
+					sstore_3;
 					sload_3;
 					sconst_2;
 					invokestatic 24;		// javacard/framework/JCSystem.makeTransientByteArray(SB)[B
 					astore 4;
 				L3:	sconst_5;
-					sload_3;
+					getfield_s_this 17;		// short project/rsa.sigLen
 					sadd;
 					sstore 5;
 				L4:	aload_2;
