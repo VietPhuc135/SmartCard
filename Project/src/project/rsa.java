@@ -162,26 +162,26 @@ public class rsa extends Applet {
     }
 }
 
-// Các lnh:
+// Cac lenh:
 
 // Send: 00 00 00 00
-// => To RSA key
+// => Tao RSA key
 
 // Send: 00 01 00 00 80
-// => Gi modulus (80 là d liu LE)
+// => Gui modulus (80 là du lieu LE)
 
 // Send: 00 02 00 00 80
-// => Gi exponent (80 là d liu LE, thc ra ch cn 3 bi exponent ch có  dài là 3bytes)
+// => Gui exponent (80 là du lieu LE, thuc ra chi can 3 boi exponent chi co do dai là 3bytes)
 
 // Send: 00 03 00 00 06 01 02 03 04 05 06
-// => Mã hóa chui 01 02 03 04 05 06 và nhn c bn mã
+// => Mã hóa chuoi 01 02 03 04 05 06 và nhan dc ban ma
 
-// Send: 00 04 00 00 80 + bn mã
-// => Gii mã và c chui c
+// Send: 00 04 00 00 80 + ban ma
+// => Giai ma va dc chuoi cu
 
 // Send: 00 05 00 00 03 01 02 03
-// => Ký chui 01 02 03 và nhn c ch ký có  dài 80 bytes
+// => Ký chuoi 01 02 03 và nhan dc chu ky có do dài 80 bytes
 
-// Send: 00 06 00 00 83 + ch ký + 01 02 03
-// => Xác thc ch ký và tr li 1 nu úng, 0 nu sai
+// Send: 00 06 00 00 83 + chu ky + 01 02 03
+// => Xác thuc chu ký và tra lai 1 neu dung, 0 neu sai
 
