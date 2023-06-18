@@ -12,7 +12,10 @@ public class demo extends Applet
 	private byte[] tempBuffer;
 	private byte[] in, enc_buffer, dec_buffer, keyData;
 	private short keyLen;
-
+	 private Encrypt encryptor;
+	//hambam
+	    private MessageDigest sha;
+    // private byte[] pin;
 	
 	// Các tag c s dng  xác nh loi thông tin cn lu tr hoc truy xut
     private static final byte ID_TAG = 0x01;
@@ -25,8 +28,7 @@ public class demo extends Applet
     
     private static final byte[] DEFAULT_PIN = {0x01, 0x02, 0x03, 0x04}; // mã PIN mc nh
     private static final byte MAX_PIN_TRIES = 3; // s ln nhp sai cho phép
-		
-
+	
     private OwnerPIN pin; // i tng OwnerPIN  lu tr và qun lý PIN
 
     // Các mã li c s dng trong chng trình
@@ -60,7 +62,8 @@ public class demo extends Applet
         // t giá tr mc nh cho PIN
         pin.update(DEFAULT_PIN, (short) 0, (byte) DEFAULT_PIN.length);
         
-        //mã hóa
+        //ma hoa
+        encryptor = new Encrypt();
         keyLen = (short)(KeyBuilder.LENGTH_AES_128/8);
        
 		in = new byte[keyLen];
@@ -76,6 +79,9 @@ public class demo extends Applet
 		cipher = Cipher.getInstance(Cipher.ALG_AES_BLOCK_128_ECB_NOPAD, false);
 		aesKey = (AESKey)KeyBuilder.buildKey(KeyBuilder.TYPE_AES, (short)(8*keyLen), false);
 		aesKey.setKey(keyData, (short)0);
+		
+		//ham bam
+		  sha = MessageDigest.getInstance(MessageDigest.ALG_SHA, false);
 		
   }
 
@@ -135,6 +141,16 @@ public class demo extends Applet
 
         // Ghi d liu vào bin tng ng
         switch (tag) {
+        	// case ID_TAG:
+				// EncryptionHelper.encryptData(buffer, offset, lc, id, cipher, aesKey);
+				// break;
+			case NAME_TAG:
+				encryptor.encryptData(buffer, offset,  name, lc, keyLen,DEFAULT_PIN);
+				break;
+			// case BIRTHDATE_TAG:
+				// EncryptionHelper.encryptData(buffer, offset, lc, birthdate, cipher, aesKey);
+				// break;
+
             case ID_TAG:
 				// Util.arrayCopy(buffer, offset, id, (short)0, lc);
 				while(lc > 0){
@@ -152,23 +168,23 @@ public class demo extends Applet
 				}
 
                 break;
-            case NAME_TAG:
-            	//Util.arrayCopy(buffer, offset, name, (short) 0, lc);
-				while(lc > 0){
-					byte[] buf = apdu.getBuffer();
-					Util.arrayCopy(buffer, offset, buf, pointer, byteRead);
-					pointer += byteRead;
-					lc -= byteRead;
-					byteRead = apdu.receiveBytes(ISO7816.OFFSET_CDATA);
+            // case NAME_TAG:
+            	// //Util.arrayCopy(buffer, offset, name, (short) 0, lc);
+				// while(lc > 0){
+					// byte[] buf = apdu.getBuffer();
+					// Util.arrayCopy(buffer, offset, buf, pointer, byteRead);
+					// pointer += byteRead;
+					// lc -= byteRead;
+					// byteRead = apdu.receiveBytes(ISO7816.OFFSET_CDATA);
         
-					cipher.init(aesKey,Cipher.MODE_ENCRYPT);
-					cipher.doFinal(buf,(short)0,keyLen,enc_buffer,(short)0);
-					Util.arrayCopy(enc_buffer,(short)0,name,(short)0,keyLen);
+					// cipher.init(aesKey,Cipher.MODE_ENCRYPT);
+					// cipher.doFinal(buf,(short)0,keyLen,enc_buffer,(short)0);
+					// Util.arrayCopy(enc_buffer,(short)0,name,(short)0,keyLen);
 					
-					Util.arrayFillNonAtomic(enc_buffer, (short) 0, byteRead, (byte) 0x00);
-				}
+					// Util.arrayFillNonAtomic(enc_buffer, (short) 0, byteRead, (byte) 0x00);
+				// }
 				
-                break;
+                // break;
             case BIRTHDATE_TAG:
                 //Util.arrayCopy(buffer, offset, birthdate, (short)0, lc);
                 while(lc > 0){
