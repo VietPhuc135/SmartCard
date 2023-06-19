@@ -46,7 +46,7 @@ public class Encrypt {
         byte[] pinHash = new byte[32];
         sha256.reset();
         //tinh toan ham 
-        sha256.doFinal(pin, (short) 0, (short) DEFAULT_PIN.length, pinHash, (short) 0);
+        sha256.doFinal(pin, (short) 0, (short) pin.length, pinHash, (short) 0);
         
         // Khi to khóa AES t pinHash
         AESKey aesKey = (AESKey) KeyBuilder.buildKey(KeyBuilder.TYPE_AES_TRANSIENT_RESET, KeyBuilder.LENGTH_AES_128, false);
