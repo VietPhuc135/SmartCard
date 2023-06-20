@@ -66,14 +66,14 @@ public class demo extends Applet
         encryptor = new Encrypt();
         keyLen = (short)(KeyBuilder.LENGTH_AES_128/8);
        
-		in = new byte[keyLen];
+		// in = new byte[keyLen];
 		enc_buffer = new byte[keyLen];
 		dec_buffer= new byte[keyLen];
 		keyData = new byte[keyLen];
 		
 		for (byte i = 0; i < (byte)keyLen; i++){
 		keyData[i] = (byte)i;
-		in[i] = (byte)(i+1);
+		// in[i] = (byte)(i+1);
 		}
 		
 		cipher = Cipher.getInstance(Cipher.ALG_AES_BLOCK_128_ECB_NOPAD, false);
