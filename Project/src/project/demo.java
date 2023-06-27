@@ -26,8 +26,9 @@ public class demo extends Applet
     private static final byte[] DEFAULT_PIN = {0x01, 0x02, 0x03, 0x04}; // mã PIN mc nh
     private static final byte MAX_PIN_TRIES = 3; // s ln nhp sai cho phép
 		
-
     private OwnerPIN pin; // i tng OwnerPIN  lu tr và qun lý PIN
+    
+    private boolean isLocked = false;
 
     // Các mã li c s dng trong chng trình
     private static final short SW_INVALID_LENGTH = 0x6A84;
@@ -76,7 +77,6 @@ public class demo extends Applet
 		cipher = Cipher.getInstance(Cipher.ALG_AES_BLOCK_128_ECB_NOPAD, false);
 		aesKey = (AESKey)KeyBuilder.buildKey(KeyBuilder.TYPE_AES, (short)(8*keyLen), false);
 		aesKey.setKey(keyData, (short)0);
-		
   }
 
 	public static void install(byte[] bArray, short bOffset, byte bLength) 
@@ -94,30 +94,44 @@ public class demo extends Applet
         byte[] buffer = apdu.getBuffer();
         short lc = (short)(buffer[ISO7816.OFFSET_LC] & 0xFF);
         
-		switch(buffer[ISO7816.OFFSET_INS]) {
-			case (byte) 0x01:
-				// Lnh WRITE DATA
-				writeData(buffer, apdu, lc);
-				break;
-			case (byte) 0x02:
-				// Lnh READ DATA
-				readData(buffer, apdu);
-				break;
-			case (byte) 0x03:
-				// Lnh RESET
-				resetData();
-				break;
-			case (byte) 0x04:
-                verify(apdu); // gi hàm kim tra mã PIN
-                break;
-            case (byte) 0x05:
-                change(apdu); // gi hàm thay i mã PIN
-                break;
-			default:
-				// Lnh không c h tr
-				ISOException.throwIt(ISO7816.SW_INS_NOT_SUPPORTED);
-		}
-        
+        switch(buffer[ISO7816.OFFSET_INS]) {
+				case (byte) 0x01:
+					// Lnh WRITE DATA
+					if (isLocked) {
+						ISOException.throwIt(ISO7816.SW_SECURITY_STATUS_NOT_SATISFIED);
+					}
+					writeData(buffer, apdu, lc);
+					break;
+				case (byte) 0x02:
+					// Lnh READ DATA
+					if (isLocked) {
+						ISOException.throwIt(ISO7816.SW_SECURITY_STATUS_NOT_SATISFIED);
+					}
+					readData(buffer, apdu);
+					break;
+				case (byte) 0x03:
+					// Lnh RESET
+					if (isLocked) {
+						ISOException.throwIt(ISO7816.SW_SECURITY_STATUS_NOT_SATISFIED);
+					}
+					resetData();
+					break;
+				case (byte) 0x04:
+					verify(apdu); // gi hàm kim tra mã PIN
+					break;
+				case (byte) 0x05:
+					change(apdu); // gi hàm thay i mã PIN
+					break;
+				case (byte) 0x06: //khoa the
+					isLocked = true;
+					break;
+				case (byte) 0x07: //mo the
+					isLocked = false;
+					break;
+				default:
+					// Lnh không c h tr
+					ISOException.throwIt(ISO7816.SW_INS_NOT_SUPPORTED);
+			}
     }
     
     // X lý lnh WRITE DATA
@@ -344,5 +358,4 @@ public class demo extends Applet
         // Tr v mã thành công
         ISOException.throwIt(ISO7816.SW_NO_ERROR);
     }
-
 }
