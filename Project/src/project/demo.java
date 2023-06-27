@@ -117,9 +117,15 @@ public class demo extends Applet
 					resetData();
 					break;
 				case (byte) 0x04:
+					if (isLocked) {
+						ISOException.throwIt(ISO7816.SW_SECURITY_STATUS_NOT_SATISFIED);
+					}
 					verify(apdu); // gi hàm kim tra mã PIN
 					break;
 				case (byte) 0x05:
+					if (isLocked) {
+						ISOException.throwIt(ISO7816.SW_SECURITY_STATUS_NOT_SATISFIED);
+					}
 					change(apdu); // gi hàm thay i mã PIN
 					break;
 				case (byte) 0x06: //khoa the
