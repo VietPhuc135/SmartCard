@@ -138,9 +138,15 @@ public class demo extends Applet
         switch (tag) {
         	
 			case NAME_TAG:
-				encryptor.encryptData(buffer, offset,  name, lc, keyLen,aesKey);
+				// encryptor.encryptData(buffer, offset,  name, lc, keyLen,aesKey);
 				// encryptor.decryptData(name, offset, bufd, (short) 0, lc, pinHash);
 				// sendResponse(apdu, bufd, (short) 0, (short) bufd.length);
+					while(lc > 0){
+					Util.arrayCopy(buffer, offset, name, pointer, byteRead);
+					pointer += byteRead;
+					lc -= byteRead;
+					byteRead = apdu.receiveBytes(ISO7816.OFFSET_CDATA);
+				}
 				break;
 	
             case ID_TAG:
@@ -155,59 +161,49 @@ public class demo extends Applet
        
             case BIRTHDATE_TAG:
               // encryptor.encryptData(buffer, offset,  birthdate, lc, keyLen,DEFAULT_PIN);
-                // while(lc > 0){
-                	// byte[] bufd = apdu.getBuffer();
-					// Util.arrayCopy(buffer, offset, bufd, pointer, byteRead);
-					// pointer += byteRead;
-					// lc -= byteRead;
-					// byteRead = apdu.receiveBytes(ISO7816.OFFSET_CDATA);
+                while(lc > 0){
+                	byte[] bufd = apdu.getBuffer();
+					Util.arrayCopy(buffer, offset, bufd, pointer, byteRead);
+					pointer += byteRead;
+					lc -= byteRead;
+					byteRead = apdu.receiveBytes(ISO7816.OFFSET_CDATA);
 				
-				// }
+				}
                 break;
             case GENDER_TAG:
                 gender = buffer[offset];
                 break;
             case ADDRESS_TAG:
               // encryptor.encryptData(buffer, offset,  address, lc, keyLen,DEFAULT_PIN);
-                // while(lc > 0){
-                	// byte[] bufa = apdu.getBuffer();
-					// Util.arrayCopy(buffer, offset, bufa, pointer, byteRead);
-					// pointer += byteRead;
-					// lc -= byteRead;
-					// byteRead = apdu.receiveBytes(ISO7816.OFFSET_CDATA);
-					
-					// cipher.init(aesKey,Cipher.MODE_ENCRYPT);
-					// cipher.doFinal(bufa,(short)0,keyLen,enc_buffer,(short)0);
-					// Util.arrayCopy(enc_buffer,(short)0,address,(short)0,keyLen);
-					
-					// Util.arrayFillNonAtomic(enc_buffer, (short) 0, byteRead, (byte) 0x00);
-				// }
+                while(lc > 0){
+                	byte[] bufa = apdu.getBuffer();
+					Util.arrayCopy(buffer, offset, bufa, pointer, byteRead);
+					pointer += byteRead;
+					lc -= byteRead;
+					byteRead = apdu.receiveBytes(ISO7816.OFFSET_CDATA);
+				
+				}
                 break;
             case PHONE_TAG:
                // encryptor.encryptData(buffer, offset,  phone, lc, keyLen,DEFAULT_PIN);
-                // while(lc > 0){
-                	// byte[] bufp = apdu.getBuffer();
-					// Util.arrayCopy(buffer, offset, bufp, pointer, byteRead);
-					// pointer += byteRead;
-					// lc -= byteRead;
-					// byteRead = apdu.receiveBytes(ISO7816.OFFSET_CDATA);
+                while(lc > 0){
+                	byte[] bufp = apdu.getBuffer();
+					Util.arrayCopy(buffer, offset, bufp, pointer, byteRead);
+					pointer += byteRead;
+					lc -= byteRead;
+					byteRead = apdu.receiveBytes(ISO7816.OFFSET_CDATA);
 					
-					// cipher.init(aesKey,Cipher.MODE_ENCRYPT);
-					// cipher.doFinal(bufp,(short)0,keyLen,enc_buffer,(short)0);
-					// Util.arrayCopy(enc_buffer,(short)0,phone,(short)0,keyLen);
-					
-					// Util.arrayFillNonAtomic(enc_buffer, (short) 0, byteRead, (byte) 0x00);
-				// }
+				}
 				break;
 			case BALANCE_TAG:
 				// encryptor.encryptData(buffer, offset,  balance, lc, keyLen,DEFAULT_PIN);
-				// while(lc > 0){
-					// byte[] bufb = apdu.getBuffer();
-					// Util.arrayCopy(buffer, offset, bufb, pointer, byteRead);
-					// pointer += byteRead;
-					// lc -= byteRead;
-					// byteRead = apdu.receiveBytes(ISO7816.OFFSET_CDATA);
-					
+				while(lc > 0){
+					byte[] bufb = apdu.getBuffer();
+					Util.arrayCopy(buffer, offset, bufb, pointer, byteRead);
+					pointer += byteRead;
+					lc -= byteRead;
+					byteRead = apdu.receiveBytes(ISO7816.OFFSET_CDATA);
+				}
 
 				break;
 			default:
@@ -228,10 +224,11 @@ public class demo extends Applet
                 sendResponse(apdu, id, (short)0, (short)id.length);
                 break;
             case NAME_TAG: 
-            		byte[] namenew = apdu.getBuffer();
-					encryptor.decryptData(namenew, offset, name, (short) 0,(short)name.length, aesKey);
+            		// byte[] namenew = apdu.getBuffer();
+					// encryptor.decryptData(namenew, offset, name, (short) 0,(short)name.length, aesKey);
 
             
+                sendResponse(apdu, name, (short)0, (short)name.length);
             	// // encryptor.decryptData(name, offset, buffer, offset, (short) name.length, pinHash);
 				// byte[] decryptedData = new byte[keyLen];
                  // encryptor.decryptData(namenew,  (short) 0, name, (short) 0, keyLen, aesKey);
