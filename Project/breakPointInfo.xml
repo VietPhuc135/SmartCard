@@ -1,1 +1,13 @@
-<breakPointInfo/>
+<breakPointInfo>
+<package>
+<name>project</name>
+<classFile>
+<name>Encrypt.java</name>
+<lines/>
+</classFile>
+<classFile>
+<name>demo.java</name>
+<lines/>
+</classFile>
+</package>
+</breakPointInfo>

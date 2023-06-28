@@ -10,16 +10,13 @@ public class demo extends Applet
 	private Cipher cipher;
 	private AESKey aesKey;
 	private byte[] tempBuffer;
-	private byte[] in, enc_buffer, dec_buffer, keyData;
+	private byte[] in, enc_buffer, dec_buffer;
 	private short keyLen;
-<<<<<<< HEAD
-	private Encrypt encryptor;
+	 private Encrypt encryptor;
 	//hambam
-	private MessageDigest sha;
+	    private MessageDigest sha256;
+	    public  byte[] pinHash;
     // private byte[] pin;
-=======
-
->>>>>>> 6150728f5ad70aafcbb9f6199dcfaf6ec68a89a9
 	
 	// Các tag c s dng  xác nh loi thông tin cn lu tr hoc truy xut
     private static final byte ID_TAG = 0x01;
@@ -29,18 +26,12 @@ public class demo extends Applet
     private static final byte ADDRESS_TAG = 0x05;
     private static final byte PHONE_TAG = 0x06;
     private static final byte BALANCE_TAG = 0x07;
+    
     private static final byte[] DEFAULT_PIN = {0x01, 0x02, 0x03, 0x04}; // mã PIN mc nh
     private static final byte MAX_PIN_TRIES = 3; // s ln nhp sai cho phép
-<<<<<<< HEAD
-    
-    
-=======
-		
+	
     private OwnerPIN pin; // i tng OwnerPIN  lu tr và qun lý PIN
-    
-    private boolean isLocked = false;
 
->>>>>>> 6150728f5ad70aafcbb9f6199dcfaf6ec68a89a9
     // Các mã li c s dng trong chng trình
     private static final short SW_INVALID_LENGTH = 0x6A84;
     private static final short SW_INVALID_TAG = 0x6A80;
@@ -54,7 +45,6 @@ public class demo extends Applet
     private byte[] address;
     private byte[] phone;
     private byte[] balance;
-    private OwnerPIN pin; // i tng OwnerPIN  lu tr và qun lý PIN
 
     // Phng thc khi to
     public demo() {
@@ -66,29 +56,28 @@ public class demo extends Applet
         phone = new byte[16];
         balance = new byte[16];
         tempBuffer = JCSystem.makeTransientByteArray((short) 50, JCSystem.CLEAR_ON_RESET);
-
+		 pinHash = new byte[32];
         // to mi i tng OwnerPIN
         pin = new OwnerPIN(MAX_PIN_TRIES, (byte) DEFAULT_PIN.length);
 
         // t giá tr mc nh cho PIN
         pin.update(DEFAULT_PIN, (short) 0, (byte) DEFAULT_PIN.length);
         
-        //mã hóa
+        //ma hoa
+        encryptor = new Encrypt();
         keyLen = (short)(KeyBuilder.LENGTH_AES_128/8);
        
-		in = new byte[keyLen];
+		// in = new byte[keyLen];
 		enc_buffer = new byte[keyLen];
 		dec_buffer= new byte[keyLen];
-		keyData = new byte[keyLen];
 		
-		for (byte i = 0; i < (byte)keyLen; i++){
-		keyData[i] = (byte)i;
-		in[i] = (byte)(i+1);
-		}
+		//ham bam
+		  sha256 = MessageDigest.getInstance(MessageDigest.ALG_SHA, false);
+				// sha256.reset();
+		sha256.doFinal(DEFAULT_PIN, (short) 0, (short) DEFAULT_PIN.length, pinHash, (short) 0);
+		 aesKey = (AESKey) KeyBuilder.buildKey(KeyBuilder.TYPE_AES_TRANSIENT_RESET, KeyBuilder.LENGTH_AES_128, false);
+        aesKey.setKey(pinHash, (short) 0);
 		
-		cipher = Cipher.getInstance(Cipher.ALG_AES_BLOCK_128_ECB_NOPAD, false);
-		aesKey = (AESKey)KeyBuilder.buildKey(KeyBuilder.TYPE_AES, (short)(8*keyLen), false);
-		aesKey.setKey(keyData, (short)0);
   }
 
 	public static void install(byte[] bArray, short bOffset, byte bLength) 
@@ -106,50 +95,30 @@ public class demo extends Applet
         byte[] buffer = apdu.getBuffer();
         short lc = (short)(buffer[ISO7816.OFFSET_LC] & 0xFF);
         
-        switch(buffer[ISO7816.OFFSET_INS]) {
-				case (byte) 0x01:
-					// Lnh WRITE DATA
-					if (isLocked) {
-						ISOException.throwIt(ISO7816.SW_SECURITY_STATUS_NOT_SATISFIED);
-					}
-					writeData(buffer, apdu, lc);
-					break;
-				case (byte) 0x02:
-					// Lnh READ DATA
-					if (isLocked) {
-						ISOException.throwIt(ISO7816.SW_SECURITY_STATUS_NOT_SATISFIED);
-					}
-					readData(buffer, apdu);
-					break;
-				case (byte) 0x03:
-					// Lnh RESET
-					if (isLocked) {
-						ISOException.throwIt(ISO7816.SW_SECURITY_STATUS_NOT_SATISFIED);
-					}
-					resetData();
-					break;
-				case (byte) 0x04:
-					if (isLocked) {
-						ISOException.throwIt(ISO7816.SW_SECURITY_STATUS_NOT_SATISFIED);
-					}
-					verify(apdu); // gi hàm kim tra mã PIN
-					break;
-				case (byte) 0x05:
-					if (isLocked) {
-						ISOException.throwIt(ISO7816.SW_SECURITY_STATUS_NOT_SATISFIED);
-					}
-					change(apdu); // gi hàm thay i mã PIN
-					break;
-				case (byte) 0x06: //khoa the
-					isLocked = true;
-					break;
-				case (byte) 0x07: //mo the
-					isLocked = false;
-					break;
-				default:
-					// Lnh không c h tr
-					ISOException.throwIt(ISO7816.SW_INS_NOT_SUPPORTED);
-			}
+		switch(buffer[ISO7816.OFFSET_INS]) {
+			case (byte) 0x01:
+				// Lnh WRITE DATA
+				writeData(buffer, apdu, lc);
+				break;
+			case (byte) 0x02:
+				// Lnh READ DATA
+				readData(buffer, apdu);
+				break;
+			case (byte) 0x03:
+				// Lnh RESET
+				resetData();
+				break;
+			case (byte) 0x04:
+                verify(apdu); // gi hàm kim tra mã PIN
+                break;
+            case (byte) 0x05:
+                change(apdu); // gi hàm thay i mã PIN
+                break;
+			default:
+				// Lnh không c h tr
+				ISOException.throwIt(ISO7816.SW_INS_NOT_SUPPORTED);
+		}
+        
     }
     
     // X lý lnh WRITE DATA
@@ -167,125 +136,109 @@ public class demo extends Applet
 
         // Ghi d liu vào bin tng ng
         switch (tag) {
+        	
+			case NAME_TAG:
+				encryptor.encryptData(buffer, offset,  name, lc, keyLen,aesKey);
+				// encryptor.decryptData(name, offset, bufd, (short) 0, lc, pinHash);
+				// sendResponse(apdu, bufd, (short) 0, (short) bufd.length);
+				break;
+	
             case ID_TAG:
-				// Util.arrayCopy(buffer, offset, id, (short)0, lc);
+				// encryptor.encryptData(buffer, offset,  id, lc, keyLen,DEFAULT_PIN);
 				while(lc > 0){
-					byte[] bufi = apdu.getBuffer();			
-					Util.arrayCopy(buffer, offset, bufi, pointer, byteRead);
+					Util.arrayCopy(buffer, offset, id, pointer, byteRead);
 					pointer += byteRead;
 					lc -= byteRead;
 					byteRead = apdu.receiveBytes(ISO7816.OFFSET_CDATA);
-				
-					cipher.init(aesKey,Cipher.MODE_ENCRYPT);
-					cipher.doFinal(bufi,(short)0,keyLen,enc_buffer,(short)0);
-					Util.arrayCopy(enc_buffer,(short)0,id,(short)0,keyLen);
-					
-					Util.arrayFillNonAtomic(enc_buffer, (short) 0, byteRead, (byte) 0x00);
 				}
-
                 break;
-            case NAME_TAG:
-            	//Util.arrayCopy(buffer, offset, name, (short) 0, lc);
-				while(lc > 0){
-					byte[] buf = apdu.getBuffer();
-					Util.arrayCopy(buffer, offset, buf, pointer, byteRead);
-					pointer += byteRead;
-					lc -= byteRead;
-					byteRead = apdu.receiveBytes(ISO7816.OFFSET_CDATA);
-        
-					cipher.init(aesKey,Cipher.MODE_ENCRYPT);
-					cipher.doFinal(buf,(short)0,keyLen,enc_buffer,(short)0);
-					Util.arrayCopy(enc_buffer,(short)0,name,(short)0,keyLen);
-					
-					Util.arrayFillNonAtomic(enc_buffer, (short) 0, byteRead, (byte) 0x00);
-				}
-				
-                break;
+       
             case BIRTHDATE_TAG:
-                //Util.arrayCopy(buffer, offset, birthdate, (short)0, lc);
-                while(lc > 0){
-                	byte[] bufd = apdu.getBuffer();
-					Util.arrayCopy(buffer, offset, bufd, pointer, byteRead);
-					pointer += byteRead;
-					lc -= byteRead;
-					byteRead = apdu.receiveBytes(ISO7816.OFFSET_CDATA);
-					
-					cipher.init(aesKey,Cipher.MODE_ENCRYPT);
-					cipher.doFinal(bufd,(short)0,keyLen,enc_buffer,(short)0);
-					Util.arrayCopy(enc_buffer,(short)0,birthdate,(short)0,keyLen);
-					
-					Util.arrayFillNonAtomic(enc_buffer, (short) 0, byteRead, (byte) 0x00);
-				}
+              // encryptor.encryptData(buffer, offset,  birthdate, lc, keyLen,DEFAULT_PIN);
+                // while(lc > 0){
+                	// byte[] bufd = apdu.getBuffer();
+					// Util.arrayCopy(buffer, offset, bufd, pointer, byteRead);
+					// pointer += byteRead;
+					// lc -= byteRead;
+					// byteRead = apdu.receiveBytes(ISO7816.OFFSET_CDATA);
+				
+				// }
                 break;
             case GENDER_TAG:
                 gender = buffer[offset];
                 break;
             case ADDRESS_TAG:
-                //Util.arrayCopy(buffer, offset, address, (short)0, lc);
-                while(lc > 0){
-                	byte[] bufa = apdu.getBuffer();
-					Util.arrayCopy(buffer, offset, bufa, pointer, byteRead);
-					pointer += byteRead;
-					lc -= byteRead;
-					byteRead = apdu.receiveBytes(ISO7816.OFFSET_CDATA);
+              // encryptor.encryptData(buffer, offset,  address, lc, keyLen,DEFAULT_PIN);
+                // while(lc > 0){
+                	// byte[] bufa = apdu.getBuffer();
+					// Util.arrayCopy(buffer, offset, bufa, pointer, byteRead);
+					// pointer += byteRead;
+					// lc -= byteRead;
+					// byteRead = apdu.receiveBytes(ISO7816.OFFSET_CDATA);
 					
-					cipher.init(aesKey,Cipher.MODE_ENCRYPT);
-					cipher.doFinal(bufa,(short)0,keyLen,enc_buffer,(short)0);
-					Util.arrayCopy(enc_buffer,(short)0,address,(short)0,keyLen);
+					// cipher.init(aesKey,Cipher.MODE_ENCRYPT);
+					// cipher.doFinal(bufa,(short)0,keyLen,enc_buffer,(short)0);
+					// Util.arrayCopy(enc_buffer,(short)0,address,(short)0,keyLen);
 					
-					Util.arrayFillNonAtomic(enc_buffer, (short) 0, byteRead, (byte) 0x00);
-				}
+					// Util.arrayFillNonAtomic(enc_buffer, (short) 0, byteRead, (byte) 0x00);
+				// }
                 break;
             case PHONE_TAG:
-                //Util.arrayCopy(buffer, offset, phone, (short)0, lc);
-                while(lc > 0){
-                	byte[] bufp = apdu.getBuffer();
-					Util.arrayCopy(buffer, offset, bufp, pointer, byteRead);
-					pointer += byteRead;
-					lc -= byteRead;
-					byteRead = apdu.receiveBytes(ISO7816.OFFSET_CDATA);
+               // encryptor.encryptData(buffer, offset,  phone, lc, keyLen,DEFAULT_PIN);
+                // while(lc > 0){
+                	// byte[] bufp = apdu.getBuffer();
+					// Util.arrayCopy(buffer, offset, bufp, pointer, byteRead);
+					// pointer += byteRead;
+					// lc -= byteRead;
+					// byteRead = apdu.receiveBytes(ISO7816.OFFSET_CDATA);
 					
-					cipher.init(aesKey,Cipher.MODE_ENCRYPT);
-					cipher.doFinal(bufp,(short)0,keyLen,enc_buffer,(short)0);
-					Util.arrayCopy(enc_buffer,(short)0,phone,(short)0,keyLen);
+					// cipher.init(aesKey,Cipher.MODE_ENCRYPT);
+					// cipher.doFinal(bufp,(short)0,keyLen,enc_buffer,(short)0);
+					// Util.arrayCopy(enc_buffer,(short)0,phone,(short)0,keyLen);
 					
-					Util.arrayFillNonAtomic(enc_buffer, (short) 0, byteRead, (byte) 0x00);
-				}
+					// Util.arrayFillNonAtomic(enc_buffer, (short) 0, byteRead, (byte) 0x00);
+				// }
 				break;
 			case BALANCE_TAG:
-				//Util.arrayCopy(buffer, offset, balance, (short)0, lc);
-				while(lc > 0){
-					byte[] bufb = apdu.getBuffer();
-					Util.arrayCopy(buffer, offset, bufb, pointer, byteRead);
-					pointer += byteRead;
-					lc -= byteRead;
-					byteRead = apdu.receiveBytes(ISO7816.OFFSET_CDATA);
+				// encryptor.encryptData(buffer, offset,  balance, lc, keyLen,DEFAULT_PIN);
+				// while(lc > 0){
+					// byte[] bufb = apdu.getBuffer();
+					// Util.arrayCopy(buffer, offset, bufb, pointer, byteRead);
+					// pointer += byteRead;
+					// lc -= byteRead;
+					// byteRead = apdu.receiveBytes(ISO7816.OFFSET_CDATA);
 					
-					cipher.init(aesKey,Cipher.MODE_ENCRYPT);
-					cipher.doFinal(bufb,(short)0,keyLen,enc_buffer,(short)0);
-					Util.arrayCopy(enc_buffer,(short)0,balance,(short)0,keyLen);
-					
-					Util.arrayFillNonAtomic(enc_buffer, (short) 0, byteRead, (byte) 0x00);
-				}
+
 				break;
 			default:
 				// Nu tag không hp l, gi mã li tr v
 				ISOException.throwIt(SW_INVALID_TAG);
 		}
 	
-	}
+	
+    }
 	
     // X lý lnh READ DATAs
     private void readData(byte[] buffer, APDU apdu) {
         byte tag = buffer[ISO7816.OFFSET_P1];
-
+		short offset = ISO7816.OFFSET_CDATA;
         // Tr v thông tin cn ly
         switch(tag) {
             case ID_TAG:
                 sendResponse(apdu, id, (short)0, (short)id.length);
                 break;
-            case NAME_TAG:
-                sendResponse(apdu, name, (short)0, (short)name.length);
+            case NAME_TAG: 
+            		byte[] namenew = apdu.getBuffer();
+					encryptor.decryptData(namenew, offset, name, (short) 0,(short)name.length, aesKey);
+
+            
+            	// // encryptor.decryptData(name, offset, buffer, offset, (short) name.length, pinHash);
+				// byte[] decryptedData = new byte[keyLen];
+                 // encryptor.decryptData(namenew,  (short) 0, name, (short) 0, keyLen, aesKey);
+				 // Util.arrayCopy(namenew, (short)0,decryptedData, (short)0, keyLen);
+                sendResponse(apdu, namenew, (short)0, (short)namenew.length);
+                // sendResponse(apdu, decryptedData, (short)0, (short)decryptedData.length);
+                // apdu.setOutgoingAndSend((short)0, keyLen);
                 break;
             case BIRTHDATE_TAG:
                 sendResponse(apdu, birthdate, (short)0, (short)birthdate.length);
@@ -376,4 +329,5 @@ public class demo extends Applet
         // Tr v mã thành công
         ISOException.throwIt(ISO7816.SW_NO_ERROR);
     }
+
 }
