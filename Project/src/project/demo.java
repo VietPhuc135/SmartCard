@@ -12,9 +12,9 @@ public class demo extends Applet
 	private byte[] tempBuffer;
 	private byte[] in, enc_buffer, dec_buffer, keyData;
 	private short keyLen;
-	 private Encrypt encryptor;
+	private Encrypt encryptor;
 	//hambam
-	    private MessageDigest sha;
+	private MessageDigest sha;
     // private byte[] pin;
 	
 	// Các tag c s dng  xác nh loi thông tin cn lu tr hoc truy xut
@@ -25,12 +25,10 @@ public class demo extends Applet
     private static final byte ADDRESS_TAG = 0x05;
     private static final byte PHONE_TAG = 0x06;
     private static final byte BALANCE_TAG = 0x07;
-    
     private static final byte[] DEFAULT_PIN = {0x01, 0x02, 0x03, 0x04}; // mã PIN mc nh
     private static final byte MAX_PIN_TRIES = 3; // s ln nhp sai cho phép
-	
-    private OwnerPIN pin; // i tng OwnerPIN  lu tr và qun lý PIN
-
+    
+    
     // Các mã li c s dng trong chng trình
     private static final short SW_INVALID_LENGTH = 0x6A84;
     private static final short SW_INVALID_TAG = 0x6A80;
@@ -44,6 +42,7 @@ public class demo extends Applet
     private byte[] address;
     private byte[] phone;
     private byte[] balance;
+    private OwnerPIN pin; // i tng OwnerPIN  lu tr và qun lý PIN
 
     // Phng thc khi to
     public demo() {

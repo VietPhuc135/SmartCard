@@ -1,5 +1,5 @@
 // converted by version 1.3
-// on Tue Jun 20 10:32:58 ICT 2023
+// on Tue Jun 27 01:11:17 PDT 2023
 
 .package project {
 	.aid 0x11:0x22:0x33:0x44:0x55;
@@ -461,13 +461,13 @@
 			private byte[] keyData 6;		// [B
 			private Encrypt encryptor 7;		// Lproject/Encrypt;
 			private 2.11 sha 8;		// Ljavacard/security/MessageDigest;
-			private OwnerPIN pin 9;		// Lproject/OwnerPIN;
-			private byte[] id 10;		// [B
-			private byte[] name 11;		// [B
-			private byte[] birthdate 12;		// [B
-			private byte[] address 13;		// [B
-			private byte[] phone 14;		// [B
-			private byte[] balance 15;		// [B
+			private byte[] id 9;		// [B
+			private byte[] name 10;		// [B
+			private byte[] birthdate 11;		// [B
+			private byte[] address 12;		// [B
+			private byte[] phone 13;		// [B
+			private byte[] balance 14;		// [B
+			private OwnerPIN pin 15;		// Lproject/OwnerPIN;
 			private short keyLen 16;		// S
 			private byte gender 17;		// B
 			private static final byte ID_TAG = 1;		// B
