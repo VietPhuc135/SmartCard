@@ -135,7 +135,6 @@ public class demo extends Applet
 					isLocked = false;
 					break;
 				default:
-					// Lnh không c h tr
 					ISOException.throwIt(ISO7816.SW_INS_NOT_SUPPORTED);
 			}
     }
