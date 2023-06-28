@@ -5,6 +5,7 @@
 <CLASS name="OwnerPIN"/>
 <CLASS name="Encrypt"/>
 <APPLET aid="11 22 33 44 55 01" instanceaid="" parameter="" authority="" privileges="" index="23776" name="rsa"/>
+<CLASS name="masterInterface"/>
 </PKG>
 <Libs/>
 </USER>

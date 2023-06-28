@@ -4,6 +4,7 @@ import javacard.framework.*;
 import javacardx.crypto.*;
 import javacard.security.*;
 import javacard.security.KeyBuilder;
+import project.masterInterface;
 
 public class rsa extends Applet {
     private Cipher rsaCipher;
@@ -22,6 +23,8 @@ public class rsa extends Applet {
     
     private byte[] sig_buffer;
 	private short sigLen;
+	
+	final static byte[] serverAID = new byte[] {0x11, 0x22, 0x33, 0x44, 0x55, 0x00};
 
     public static void install(byte[] bArray, short bOffset, byte bLength) {
         new rsa().register(bArray, (short) (bOffset + 1), bArray[bOffset]);
@@ -37,28 +40,52 @@ public class rsa extends Applet {
             return;
         }
 
+		AID masterAID = JCSystem.lookupAID(serverAID, (short)0, (byte)serverAID.length);
+		masterInterface sio = (masterInterface)(JCSystem.getAppletShareableInterfaceObject(masterAID, (byte)0x00));
+			
         byte[] buffer = apdu.getBuffer();
 
         switch (buffer[ISO7816.OFFSET_INS]) {
             case INS_GENERATE_KEYS:
+            	if(sio.getIsLocked()){
+	            	ISOException.throwIt(ISO7816.SW_SECURITY_STATUS_NOT_SATISFIED);
+            	}
                 generateKeys();
                 break;
             case INS_SEND_MODULUS:
+            	if(sio.getIsLocked()){
+	            	ISOException.throwIt(ISO7816.SW_SECURITY_STATUS_NOT_SATISFIED);
+            	}
                 sendModulus(apdu);
                 break;
             case INS_SEND_EXPONENT:
+            	if(sio.getIsLocked()){
+	            	ISOException.throwIt(ISO7816.SW_SECURITY_STATUS_NOT_SATISFIED);
+            	}
                 sendExponent(apdu);
                 break;
             case INS_ENCRYPT:
+            	if(sio.getIsLocked()){
+	            	ISOException.throwIt(ISO7816.SW_SECURITY_STATUS_NOT_SATISFIED);
+            	}
                 encryptData(apdu);
                 break;
             case INS_DECRYPT:
+            	if(sio.getIsLocked()){
+	            	ISOException.throwIt(ISO7816.SW_SECURITY_STATUS_NOT_SATISFIED);
+            	}
                 decryptData(apdu);
                 break;
             case INS_SIGN:
+            	if(sio.getIsLocked()){
+	            	ISOException.throwIt(ISO7816.SW_SECURITY_STATUS_NOT_SATISFIED);
+            	}
                 signData(apdu);
                 break;
             case INS_VERIFY:
+            	if(sio.getIsLocked()){
+	            	ISOException.throwIt(ISO7816.SW_SECURITY_STATUS_NOT_SATISFIED);
+            	}
                 verifyData(apdu);
                 break;
             default:
