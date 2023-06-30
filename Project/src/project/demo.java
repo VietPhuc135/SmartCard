@@ -302,13 +302,16 @@ public class demo extends Applet implements masterInterface {
 
 	// Phng thc RESET
 	private void resetData() {
-		id = new byte[16];
+		//id = new byte[16];
 		name = new byte[50];
 		birthdate = new byte[16];
 		gender = 0;
 		address = new byte[100];
 		phone = new byte[16];
 		balance = new byte[16];
+		id = new byte[16];
+		
+		
 	}
 
 	// Kim tra m PIN
