@@ -5,16 +5,16 @@ import javacardx.crypto.Cipher;
 import javacard.security.*;
 
 public class demo extends Applet implements masterInterface {
-	//ma hoa
+	// ma hoa
 	private Cipher cipher;
 	private AESKey aesKey;
-	private byte[] tempBuffer;
+	private byte[] template;
 	private byte[] in, enc_buffer, dec_buffer, dec_buffer1, dec_buffer2;
 	private short keyLen;
-	 private Encrypt encryptor;
-	//hambam
-	    private MessageDigest sha256;
-	    public  byte[] pinHash;
+	private Encrypt encryptor;
+	// hambam
+	private MessageDigest sha256;
+	public byte[] pinHash;
 
 	// Cc tag c s dng  xc nh loi thng tin cn lu tr hoc truy xut
 	private static final byte ID_TAG = 0x01;
@@ -25,14 +25,14 @@ public class demo extends Applet implements masterInterface {
 	private static final byte PHONE_TAG = 0x06;
 	private static final byte BALANCE_TAG = 0x07;
 	private final static byte INS_SETIMG = (byte) 0x12;
-    private final static byte INS_GETIMG = (byte) 0x13;
+	private final static byte INS_GETIMG = (byte) 0x13;
 
 	private static final byte[] DEFAULT_PIN = { 0x01, 0x02, 0x03, 0x04 }; // m PIN mc nh
 	private static final byte MAX_PIN_TRIES = 3; // s ln nhp sai cho php
 
 	private OwnerPIN pin; // i tng OwnerPIN  lu tr v qun l PIN
-    
-    public boolean isLocked = false;
+
+	public boolean isLocked = false;
 
 	// Cc m li c s dng trong chng trnh
 	private static final short SW_INVALID_LENGTH = 0x6A84;
@@ -48,21 +48,22 @@ public class demo extends Applet implements masterInterface {
 	private byte[] phone;
 	private byte[] balance;
 
-	//image
-    private byte[] image1,image2,image3,image4;
-    private short imagelen1,imagelen2,imagelen3,imagelen4, lenback1, lenback2, lenback3,lenback4, pointer1,pointer2, pointer3, pointer4;
-    public static final short MAX_LENGTH = (short)(0x7FFF);
-	
+	// image
+	private byte[] image1, image2, image3, image4;
+	private short imagelen1, imagelen2, imagelen3, imagelen4, lenback1, lenback2, lenback3, lenback4, pointer1,
+			pointer2, pointer3, pointer4;
+	public static final short MAX_LENGTH = (short) (0x7FFF);
+
 	// Phng thc khi to
 	public demo() {
 		id = new byte[16];
-		name = new byte[48];
+		name = new byte[16];
 		birthdate = new byte[16];
 		gender = 0;
-		address = new byte[112];
+		address = new byte[96];
 		phone = new byte[16];
 		balance = new byte[16];
-		tempBuffer = JCSystem.makeTransientByteArray((short) 50, JCSystem.CLEAR_ON_RESET);
+		template = JCSystem.makeTransientByteArray((short) 50, JCSystem.CLEAR_ON_RESET);
 		pinHash = new byte[16];
 		// to mi i tng OwnerPIN
 		pin = new OwnerPIN(MAX_PIN_TRIES, (byte) DEFAULT_PIN.length);
@@ -78,10 +79,10 @@ public class demo extends Applet implements masterInterface {
 		enc_buffer = new byte[keyLen];
 		dec_buffer = new byte[48];
 		dec_buffer1 = new byte[16];
-		dec_buffer2 =  new byte[112];
+		dec_buffer2 = new byte[96];
 
 		// ham bam
-		sha256 = MessageDigest.getInstance(MessageDigest.ALG_MD5,false);
+		sha256 = MessageDigest.getInstance(MessageDigest.ALG_MD5, false);
 		sha256.reset();
 		sha256.doFinal(DEFAULT_PIN, (short) 0, (short) DEFAULT_PIN.length, pinHash, (short) 0);
 		aesKey = (AESKey) KeyBuilder.buildKey(KeyBuilder.TYPE_AES_TRANSIENT_RESET, KeyBuilder.LENGTH_AES_128, false);
@@ -93,6 +94,9 @@ public class demo extends Applet implements masterInterface {
         image3 = new byte[MAX_LENGTH];
         image4 = new byte[MAX_LENGTH];
  
+
+		cipher = Cipher.getInstance(javacardx.crypto.Cipher.ALG_AES_BLOCK_128_ECB_NOPAD, false);
+
 	}
 
 	public static void install(byte[] bArray, short bOffset, byte bLength) {
@@ -157,231 +161,234 @@ public class demo extends Applet implements masterInterface {
 				}
                 if(buffer[ISO7816.OFFSET_P1] == 0x01){
                     imagelen1 = 0;
-                    imagelen2 = 0;
-                    imagelen3 = 0;
-                    imagelen4 = 0;
-                }
-                if(buffer[ISO7816.OFFSET_P1] == 0x02){
-                    set_img(apdu, len);
-                }
-                break;
-            case INS_GETIMG:
-            	if (isLocked) {
-					ISOException.throwIt(ISO7816.SW_SECURITY_STATUS_NOT_SATISFIED);
+     
+				     imagelen3 = 0; 
+					imagelen4 = 0;
+					
+					uffer[ISO7816.
+					set_img(apdu, 
 				}
-                if(buffer[ISO7816.OFFSET_P1] == 0x01){
+				br eak; 
+					_GETIMG:
+				(
+				n.thro
+			
+				   if(buffer[ISO7816.OFFSET_P1] == 0x01){
                     lenback1= imagelen1;
-                    lenback2= imagelen2;
-                    lenback3= imagelen3;
-                    lenback4= imagelen4;
-                    pointer1=0;
-                    pointer2=0;
-                    pointer3=0;
-                    pointer4=0;
-                    if(imagelen2 ==0){
-                        lenback2=1;
-                    }
-                    if(imagelen3==0){
-                        lenback3=1;
-                    }
-                    if(imagelen4==0){
-                        lenback4=1;
-                    }
-                }
-                if(buffer[ISO7816.OFFSET_P1] ==0x02){
-                    get_img(apdu);
-                }
-                break;
-			default:
-				ISOException.throwIt(ISO7816.SW_INS_NOT_SUPPORTED);
+     
+				     lenback3= imagelen3; 
+					lenback4 = imagelen4;
+					pointer1 =0;
+					pointer2 =0;
+					pointer3 =0;
+					pointer4 = 0;
+					if(image l en
+					    lenb a ck
+					}  
+					if (imagelen3==0 ){ 
+						lenback3 = 1;
+					}
+					if (imagelen4 == 0) {
+						lenback4 = 1;
+					}
+					    
+						r[ISO781 6 .O
+					g
+				}
+				br eak;  
+					
+				.
+				
+	}
+
+	private void addPadding(byte[] data, short offset, short length) {
+		byte paddingLength = (byte) (16 - (length % 16));
+		byte padValue = paddingLength;
+		for (short i = (short) (offset + length); i < offset + length + paddingLength; i++) {
+			data[i] = padValue;
 		}
 	}
 
-  private void addPadding(byte[] data, short offset, short length) {
-        byte paddingLength = (byte) (16 - (length % 16));
-        byte padValue = paddingLength;
-        for (short i =(short)(offset + length); i < offset + length + paddingLength; i++) {
-            data[i] = padValue;
-        }
-    }
+	private void encryptData(byte[] input, short inputOffset, byte[] output, short outputOffset, short length,
+			AESKey aesKey) {
 
-      private void encryptData(byte[] input, short inputOffset, byte[] output, short outputOffset, short length,AESKey aesKey) {
-      	 if (length % 16 != 0) {
-            addPadding(input, inputOffset, length);
-            length += (16 - (length % 16));
-        }
-        cipher.init(aesKey, Cipher.MODE_ENCRYPT);
-        cipher.doFinal(input, inputOffset, length, output, outputOffset);
-    }
+		if (length < (short) 1) {
+			ISOException.throwIt(ISO7816.SW_DATA_INVALID);
+		}
+		byte residual = (byte) (length % 16);
+		cipher.init(aesKey, Cipher.MODE_ENCRYPT);
+		if (residual == (byte) 0x00) {
+			cipher.doFinal(input, inputOffset, length, output, (short) 0);
 
-    // Gii mã d liu bng AES
-    private void decryptData(byte[] input, short inputOffset, byte[] output, short outputOffset, short length,AESKey aesKey) {
-        cipher.init(aesKey, Cipher.MODE_DECRYPT);
-        cipher.doFinal(input, inputOffset, length, output, outputOffset);
-    }
-    private void decryptData2(byte[] input, short inputOffset, byte[] output, short outputOffset, short length, AESKey aesKey, byte[] output2) {
-    cipher.init(aesKey, Cipher.MODE_DECRYPT);
-    cipher.doFinal(input, inputOffset, length, output, outputOffset);
+		}
+		cipher.update(input, inputOffset, length, output, (short) 0);
+		cipher.doFinal(template, (short) 0, (short) (16 - residual), output, (short) 0);
 
-    // Xóa padding
-    byte paddingLength = output[(short) (outputOffset + length - 1)];
-    short decryptedLength = (short) (length - paddingLength);
-    
-    // Sao chép d liu gii mã vào mng decryptedData
-    byte[] decryptedData = new byte[decryptedLength];
-    Util.arrayCopyNonAtomic(output, outputOffset, decryptedData, (short) 0, decryptedLength);
-}
+	}
 
-    
-    // X lý lnh WRITE DATA
-    private void writeData(byte[] buffer, APDU apdu, short lc) {
-        byte tag = buffer[ISO7816.OFFSET_P1];
-        short offset = ISO7816.OFFSET_CDATA;
-        aesKey.setKey(pinHash, (short) 0);
-        short byteRead = (short) (apdu.setIncomingAndReceive());
-        // Kim tra  dài d liu
-        if (lc > 255) {
-            ISOException.throwIt(SW_INVALID_LENGTH);
-        }
-        
-        short pointer = 0;
+	// Gii mï¿½ d liu bng AES
+	private void decryptData(byte[] input, short inputOffset, byte[] output, short outputOffset, short length,
+			AESKey aesKey) {
+		// cipher.init(aesKey, Cipher.MODE_DECRYPT);
+		// cipher.doFinal(input, inputOffset, length, output, outputOffset);
+		if ((short) (length % 16) != 0) {
+			ISOException.throwIt(ISO7816.SW_DATA_INVALID);
+		}
+		cipher.init(aesKey, javacardx.crypto.Cipher.MODE_DECRYPT);
+		cipher.doFinal(input, inputOffset, length, output, outputOffset);
 
-        // Ghi d liu vào bin tng ng
-        switch (tag) {
-        	
+	}
+
+	// X lï¿½ lnh WRITE DATA
+	private void writeData(byte[] buffer, APDU apdu, short lc) {
+		byte tag = buffer[ISO7816.OFFSET_P1];
+		short offset = ISO7816.OFFSET_CDATA;
+		aesKey.setKey(pinHash, (short) 0);
+		short byteRead = (short) (apdu.setIncomingAndReceive());
+		// Kim tra  dï¿½i d liu
+		if (lc > 255) {
+			ISOException.throwIt(SW_INVALID_LENGTH);
+		}
+
+		short pointer = 0;
+
+		// Ghi d liu vï¿½o bin tng ng
+		switch (tag) {
+
 			case NAME_TAG:
-				// encryptData(buffer, offset, name, (short) 0, lc,aesKey);
-				
-				while(lc > 0){
-					// name =  encryptor.encryptData(buffer, offset,  name, lc, keyLen,aesKey);
-					Util.arrayCopy(buffer, offset, name, pointer, byteRead);
-					pointer += byteRead;
-					lc -= byteRead;
-					byteRead = apdu.receiveBytes(ISO7816.OFFSET_CDATA);
-				}
+				encryptData(buffer, offset, name, (short) 0, lc, aesKey);
+
+				// while(lc > 0){
+				// Util.arrayCopy(buffer, offset, name, pointer, byteRead);
+				// pointer += byteRead;
+				// lc -= byteRead;
+				// byteRead = apdu.receiveBytes(ISO7816.OFFSET_CDATA);
+				// }
 				break;
-	
-            case ID_TAG:
-				// encryptor.encryptData(buffer, offset,  id, lc, keyLen,DEFAULT_PIN);
-				while(lc > 0){
+
+			case ID_TAG:
+				// encryptor.encryptData(buffer, offset, id, lc, keyLen,DEFAULT_PIN);
+				while (lc > 0) {
 					Util.arrayCopy(buffer, offset, id, pointer, byteRead);
 					pointer += byteRead;
 					lc -= byteRead;
 					byteRead = apdu.receiveBytes(ISO7816.OFFSET_CDATA);
 				}
-                break;
-       
-            case BIRTHDATE_TAG:
-            	
-            		// encryptData(buffer, offset, birthdate, (short) 0, lc,aesKey);
-                while(lc > 0){
-                	byte[] bufd = apdu.getBuffer();
-					Util.arrayCopy(buffer, offset, birthdate, pointer, byteRead);
-					pointer += byteRead;
-					lc -= byteRead;
-					byteRead = apdu.receiveBytes(ISO7816.OFFSET_CDATA);
-				
-				}
-                break;
-            case GENDER_TAG:
-                gender = buffer[offset];
-                break;
-            case ADDRESS_TAG:
-            		// encryptData(buffer, offset, address, (short) 0, lc,aesKey);
-              // encryptor.encryptData(buffer, offset,  address, lc, keyLen,DEFAULT_PIN);
-                while(lc > 0){
-                	byte[] bufa = apdu.getBuffer();
+				break;
+
+			case BIRTHDATE_TAG:
+
+				encryptData(buffer, offset, birthdate, (short) 0, lc, aesKey);
+				// while(lc > 0){
+				// byte[] bufd = apdu.getBuffer();
+				// Util.arrayCopy(buffer, offset, birthdate, pointer, byteRead);
+				// pointer += byteRead;
+				// lc -= byteRead;
+				// byteRead = apdu.receiveBytes(ISO7816.OFFSET_CDATA);
+
+				// }
+				break;
+			case GENDER_TAG:
+				gender = buffer[offset];
+				break;
+			case ADDRESS_TAG:
+				// encryptData(buffer, offset, address, (short) 0, lc,aesKey);
+				// encryptor.encryptData(buffer, offset, address, lc, keyLen,DEFAULT_PIN);
+				while (lc > 0) {
+					byte[] bufa = apdu.getBuffer();
 					Util.arrayCopy(buffer, offset, address, pointer, byteRead);
 					pointer += byteRead;
 					lc -= byteRead;
 					byteRead = apdu.receiveBytes(ISO7816.OFFSET_CDATA);
-					
-				}
-                break;
-            case PHONE_TAG:
-            			// encryptData(buffer, offset, phone, (short) 0, lc,aesKey);
-               // encryptor.encryptData(buffer, offset,  phone, lc, keyLen,DEFAULT_PIN);
-                while(lc > 0){
-                	byte[] bufp = apdu.getBuffer();
-					Util.arrayCopy(buffer, offset, phone, pointer, byteRead);
-					pointer += byteRead;
-					lc -= byteRead;
-					byteRead = apdu.receiveBytes(ISO7816.OFFSET_CDATA);
-					
+
 				}
 				break;
+			case PHONE_TAG:
+				encryptData(buffer, offset, phone, (short) 0, lc, aesKey);
+				// encryptor.encryptData(buffer, offset, phone, lc, keyLen,DEFAULT_PIN);
+				// while(lc > 0){
+
+				// Util.arrayCopy(buffer, offset, phone, pointer, byteRead);
+				// pointer += byteRead;
+				// lc -= byteRead;
+				// byteRead = apdu.receiveBytes(ISO7816.OFFSET_CDATA);
+
+				// }
+				break;
 			case BALANCE_TAG:
-						// encryptData(buffer, offset, balance, (short) 0, lc,aesKey);
-				// encryptor.encryptData(buffer, offset,  balance, lc, keyLen,DEFAULT_PIN);
-				JCSystem.beginTransaction();
-				while(lc > 0){
-					byte[] bufb = apdu.getBuffer();
-					Util.arrayCopy(buffer, offset, balance, pointer, byteRead);
-					pointer += byteRead;
-					lc -= byteRead;
-					byteRead = apdu.receiveBytes(ISO7816.OFFSET_CDATA);
-				}
-				JCSystem.commitTransaction();
+				encryptData(buffer, offset, balance, (short) 0, lc, aesKey);
+				// encryptor.encryptData(buffer, offset, balance, lc, keyLen,DEFAULT_PIN);
+				// JCSystem.beginTransaction();
+				// while(lc > 0){
+				// byte[] bufb = apdu.getBuffer();
+				// Util.arrayCopy(buffer, offset, balance, pointer, byteRead);
+				// pointer += byteRead;
+				// lc -= byteRead;
+				// byteRead = apdu.receiveBytes(ISO7816.OFFSET_CDATA);
+				// }
+				// JCSystem.commitTransaction();
 
 				break;
 			default:
-				// Nu tag không hp l, gi mã li tr v
+				// Nu tag khï¿½ng hp l, gi mï¿½ li tr v
 				ISOException.throwIt(SW_INVALID_TAG);
 		}
-	
-	
-    }
-	
-    // X lý lnh READ DATAs
-    private void readData(byte[] buffer, APDU apdu) {
-        byte tag = buffer[ISO7816.OFFSET_P1];
+
+	}
+
+	// X lï¿½ lnh READ DATAs
+	private void readData(byte[] buffer, APDU apdu) {
+		byte tag = buffer[ISO7816.OFFSET_P1];
 		short offset = ISO7816.OFFSET_CDATA;
-		
-        // Tr v thông tin cn ly
-        switch(tag) {
-            case ID_TAG:
-                sendResponse(apdu, id, (short)0, (short)id.length);
-                break;
-            case NAME_TAG: 
-            	sendResponse(apdu, name, (short)0, (short)name.length);
-				// decryptData2(name, (short) 0, dec_buffer, (short) 0, (short) name.length,aesKey,);
-                // sendResponse(apdu, dec_buffer, (short) 0, (short) dec_buffer.length);
-				
-                break;
-            case BIRTHDATE_TAG:
-            	            	
-				// decryptData(birthdate, (short) 0, dec_buffer1, (short) 0, (short) birthdate.length,aesKey);
-                // sendResponse(apdu, dec_buffer1, (short) 0, (short) dec_buffer1.length);
-                
-                sendResponse(apdu, birthdate, (short)0, (short)birthdate.length);
-                break;
-            case GENDER_TAG:
-            	
-                sendResponse(apdu, new byte[] { gender }, (short)0, (short)1);
-                break;
-            case ADDRESS_TAG:
-            			// decryptData(address, (short) 0, dec_buffer2, (short) 0, (short) address.length,aesKey);
-                // sendResponse(apdu, dec_buffer2, (short) 0, (short) dec_buffer2.length);
-                sendResponse(apdu, address, (short)0, (short)address.length);
-                break;
-            case PHONE_TAG:
-            	// decryptData(phone, (short) 0, dec_buffer, (short) 0, (short) phone.length,aesKey);
-                // sendResponse(apdu, dec_buffer, (short) 0, (short) dec_buffer.length);
-             
-                sendResponse(apdu, phone, (short)0, (short)phone.length);
-                break;
-            case BALANCE_TAG:
-            	// decryptData(balance, (short) 0, dec_buffer1, (short) 0, (short) balance.length,aesKey);
-                // sendResponse(apdu, dec_buffer1, (short) 0, (short) dec_buffer1.length);
-             
-                sendResponse(apdu, balance, (short)0, (short)balance.length);
-                break;
-            default:
-                // Nu tag không hp l, gi mã li tr v
-                ISOException.throwIt(SW_RECORD_NOT_FOUND);
-        }
-      
-    }
+
+		// Tr v thï¿½ng tin cn ly
+		switch (tag) {
+			case ID_TAG:
+				sendResponse(apdu, id, (short) 0, (short) id.length);
+				break;
+			case NAME_TAG:
+				// // sendResponse(apdu, name, (short)0, (short)name.length);
+				decryptData(name, (short) 0, dec_buffer, (short) 0, (short) name.length, aesKey);
+				// decryptData2(name, (short) 0, dec_buffer, (short) 0, (short)
+				// name.length,aesKey,);
+				sendResponse(apdu, dec_buffer, (short) 0, (short) dec_buffer.length);
+
+				break;
+			case BIRTHDATE_TAG:
+
+				decryptData(birthdate, (short) 0, dec_buffer1, (short) 0, (short) birthdate.length, aesKey);
+				sendResponse(apdu, dec_buffer1, (short) 0, (short) dec_buffer1.length);
+
+				// sendResponse(apdu, birthdate, (short)0, (short)birthdate.length);
+				break;
+			case GENDER_TAG:
+
+				sendResponse(apdu, new byte[] { gender }, (short) 0, (short) 1);
+				break;
+			case ADDRESS_TAG:
+				// decryptData(address, (short) 0, dec_buffer2, (short) 0, (short)
+				// address.length,aesKey);
+				// sendResponse(apdu, dec_buffer2, (short) 0, (short) dec_buffer2.length);
+				sendResponse(apdu, address, (short) 0, (short) address.length);
+				break;
+			case PHONE_TAG:
+				decryptData(phone, (short) 0, dec_buffer, (short) 0, (short) phone.length, aesKey);
+				sendResponse(apdu, dec_buffer, (short) 0, (short) dec_buffer.length);
+
+				// sendResponse(apdu, phone, (short)0, (short)phone.length);
+				break;
+			case BALANCE_TAG:
+				decryptData(balance, (short) 0, dec_buffer1, (short) 0, (short) balance.length, aesKey);
+				sendResponse(apdu, dec_buffer1, (short) 0, (short) dec_buffer1.length);
+
+				// sendResponse(apdu, balance, (short)0, (short)balance.length);
+				break;
+			default:
+				// Nu tag khï¿½ng hp l, gi mï¿½ li tr v
+				ISOException.throwIt(SW_RECORD_NOT_FOUND);
+		}
+
+	}
 
 	// Phng thc gi d liu tr v
 	private void sendResponse(APDU apdu, byte[] data, short offset, short length) {
@@ -402,7 +409,7 @@ public class demo extends Applet implements masterInterface {
 
 	// Phng thc RESET
 	private void resetData() {
-		//id = new byte[16];
+		// id = new byte[16];
 		name = new byte[50];
 		birthdate = new byte[16];
 		gender = 0;
@@ -410,8 +417,7 @@ public class demo extends Applet implements masterInterface {
 		phone = new byte[16];
 		balance = new byte[16];
 		id = new byte[16];
-		
-		
+
 	}
 
 	// Kim tra m PIN
@@ -451,89 +457,87 @@ public class demo extends Applet implements masterInterface {
 	}
 	
 	private void set_img(APDU apdu, short len){
-        byte[] buf = apdu.getBuffer();
-        short offData = (short) (ISO7816.OFFSET_CDATA & 0xFF);
-        if((short)(MAX_LENGTH-imagelen3)<255){
-            Util.arrayCopy(buf, offData, image4, imagelen4, len);
-            imagelen4 += len;
-        }else{
-            if((short)(MAX_LENGTH-imagelen2)<255){
-                Util.arrayCopy(buf, offData, image3, imagelen3, len);
-                imagelen3 += len;
-            }else{
-                if((short)(MAX_LENGTH-imagelen1)<255){
-                    Util.arrayCopy(buf, offData, image2, imagelen2, len);
-                    imagelen2 += len;
-                }else{
-                    Util.arrayCopy(buf, offData, image1, imagelen1, len);
-                    imagelen1 += len;
-                }
-            }
-        }
-    }
+         shor
 
-    private void get_img(APDU apdu){
-        byte[] buf = apdu.getBuffer();
-        short datalen = 255;
-        if(lenback3==0){
-            if(lenback4 <255){
-                datalen = lenback4;
-            }
-            apdu.setOutgoing();
-            apdu.setOutgoingLength((short)255);
-            Util.arrayCopy(image4, (pointer4), buf, (short)0, datalen);
-            apdu.sendBytes((short)0, datalen);
-            pointer4+=  (short)255;
-            lenback4 -= (short)(255);
-        }else{
-            if(lenback2==0){
-                if(lenback3 <255){
-                    datalen = lenback3;
-                }
-                apdu.setOutgoing();
-                apdu.setOutgoingLength((short)255);
-                Util.arrayCopy(image3, (pointer3), buf, (short)0, datalen);
-                apdu.sendBytes((short)0, datalen);
-                pointer3+=  (short)255;
-                lenback3 -= (short)(255);
-            }else{
-                if(lenback1==0){
-                    if(lenback2 <255){
-                        datalen = lenback2;
-                    }
-                    apdu.setOutgoing();
-                    apdu.setOutgoingLength((short)255);
-                    Util.arrayCopy(image2, (pointer2), buf, (short)0, datalen);
-                    apdu.sendBytes((short)0, datalen);
-                    pointer2+=  (short)255;
-                    lenback2 -= (short)(255);
-                }else{
-                    if(lenback1 <255){
-                        datalen = lenback1;
-                    }
-                    apdu.setOutgoing();
-                    apdu.setOutgoingLength((short)255);
-                    Util.arrayCopy(image1, (pointer1), buf, (short)0, datalen);
-                    apdu.sendBytes((short)0, datalen);
-                    pointer1+=  (short)255;
-                    lenback1 -= (short)(255);
-                }
-            }
-        }
-    }
+	           Util.arrayCopy(buf, offData, im a
+		    imagelen4 += len;
+		}else{
+		     if((sh ort)(MAX_LE N GTH-imagel e n2)< 2
+			    Util.arrayCopy(buf, offData, image3, imagelen3, l
+			    imagelen3 += 
+		     } e
+			     if((sh ort)(MAX_LE N GTH-imagel e n1)< 2
+				    Util.arrayCopy(buf, offData, image2, imagelen2, l
+				    imagelen2 += 
+			     } e
+				     Util.a rrayCopy(bu f , offData,   imag e
+					imagelen1 += len;
+					
+				  
+					
+					
+				
+			v
+		b
+	 
 
+	        if(lenback4 <255){ 
+		        datalen = lenback4;
+		    }
+		     apdu.se tO ut g
+			ap du.setOutgo ingL e
+				.arrayCopy(image4, 
+			a
+			pointer4+=  (short)
+			lenback4 -= (short)(255); 
+			e{ 
+			if(lenback2==0){ 
+			    if(l en ck3 <25 5){
+			        datalen = l enback
+		        
+			     apdu.se tO ut g
+				ap du.setOutgo ingL e
+					.arrayCopy(image3, 
+				a
+				pointer3+=  (short)
+				lenback3 -= (short)(255); 
+				e{ 
+				if(lenback1==0){ 
+				    if(l en ck2 <25 5){
+				        datalen = l enback
+			        
+				     apdu.se tO ut g
+					ap du.setOutgo ingL e
+						.arrayCopy(image2, 
+					a
+					pointer2+=  (short)
+					lenback2 -= (short)(255); 
+					e{ 
+					if(lenback1 <255){ 
+					    data le = lenba ck1;
+					} 
+				     a p
+					ap du.setOutgo ingL e
+						.arrayCopy(image1, 
+					a
+					pointer1+=  (short)
+					lenback1 -= (short)(255); 
+					 
+					 
+					   
+					 
+				
+			
+		S
 	
-	public Shareable getShareableInterfaceObject (AID clientAID, byte parameter){
-		
-		// xacs thuc nguoi dungf
-		if(parameter != (byte)0x00)	
+
 			return null;
-		
+
 		return this;
 	}
-	
+
 	public boolean getIsLocked() {
-        return isLocked;
-    }
+		return isLocked;
+	}
 
 }
