@@ -1,5 +1,5 @@
 // converted by version 1.3
-// on Fri Jun 30 22:36:37 ICT 2023
+// on Sat Jul 01 00:09:27 ICT 2023
 
 .package project {
 	.aid 0x11:0x22:0x33:0x44:0x55;
@@ -43,7 +43,7 @@
 		// 11
 		instanceFieldRef byte[] demo/balance;
 		// 12
-		instanceFieldRef byte[] demo/tempBuffer;
+		instanceFieldRef byte[] demo/template;
 		// 13
 		instanceFieldRef byte[] demo/pinHash;
 		// 14
@@ -137,7 +137,7 @@
 			.descriptor	Ljavacard/framework/APDU;	1.10;
 
 		// 53
-		staticMethodRef demo/addPadding([BSS)V;
+		virtualMethodRef 2.1.5([BSS[BS)S;		// javacardx/crypto/Cipher.update([BSS[BS)S
 		// 54
 		virtualMethodRef 1.10.6()S;		// javacard/framework/APDU.setIncomingAndReceive()S
 		// 55
@@ -171,96 +171,94 @@
 			.descriptor	Ljavacard/security/Key;	3.0;
 
 		// 66
-		virtualMethodRef 2.1.5([BSS[BS)S;		// javacardx/crypto/Cipher.update([BSS[BS)S
-		// 67
 		classRef rsa;
-		// 68
+		// 67
 		staticMethodRef rsa/<init>()V;
-		// 69
+		// 68
 		virtualMethodRef 1.3.2([BSB)V;		// javacard/framework/Applet.register([BSB)V
-		// 70
+		// 69
 		virtualMethodRef 2.1.1([BSS[BS)S;		// javacardx/crypto/Cipher.doFinal([BSS[BS)S
-		// 71
+		// 70
 		staticMethodRef 1.8.13(SB)[B;		// javacard/framework/JCSystem.makeTransientByteArray(SB)[B
-		// 72
+		// 71
 		virtualMethodRef 1.3.3()Z;		// javacard/framework/Applet.selectingApplet()Z
-		// 73
+		// 72
 		staticFieldRef byte[] rsa/serverAID;
-		// 74
+		// 73
 		staticMethodRef 1.8.11([BSB)Ljavacard/framework/AID;;		// javacard/framework/JCSystem.lookupAID([BSB)Ljavacard/framework/AID;
 			.descriptor	Ljavacard/framework/AID;	1.6;
 
-		// 75
+		// 74
 		staticMethodRef 1.8.4(Ljavacard/framework/AID;B)Ljavacard/framework/Shareable;;		// javacard/framework/JCSystem.getAppletShareableInterfaceObject(Ljavacard/framework/AID;B)Ljavacard/framework/Shareable;
 			.descriptor	Ljavacard/framework/AID;	1.6;
 			.descriptor	Ljavacard/framework/Shareable;	1.2;
 
-		// 76
+		// 75
 		classRef masterInterface;
-		// 77
+		// 76
 		staticMethodRef rsa/generateKeys()V;
-		// 78
+		// 77
 		staticMethodRef rsa/sendModulus(Ljavacard/framework/APDU;)V;
 			.descriptor	Ljavacard/framework/APDU;	1.10;
 
-		// 79
+		// 78
 		staticMethodRef rsa/sendExponent(Ljavacard/framework/APDU;)V;
 			.descriptor	Ljavacard/framework/APDU;	1.10;
 
-		// 80
+		// 79
 		staticMethodRef rsa/encryptData(Ljavacard/framework/APDU;)V;
 			.descriptor	Ljavacard/framework/APDU;	1.10;
 
-		// 81
+		// 80
 		staticMethodRef rsa/decryptData(Ljavacard/framework/APDU;)V;
 			.descriptor	Ljavacard/framework/APDU;	1.10;
 
-		// 82
+		// 81
 		staticMethodRef rsa/signData(Ljavacard/framework/APDU;)V;
 			.descriptor	Ljavacard/framework/APDU;	1.10;
 
-		// 83
+		// 82
 		staticMethodRef rsa/verifyData(Ljavacard/framework/APDU;)V;
 			.descriptor	Ljavacard/framework/APDU;	1.10;
 
-		// 84
+		// 83
 		staticMethodRef 0.0.0()V;		// java/lang/Object.<init>()V
-		// 85
+		// 84
 		staticMethodRef 3.15.0(BZ)Ljavacard/security/Signature;;		// javacard/security/Signature.getInstance(BZ)Ljavacard/security/Signature;
 			.descriptor	Ljavacard/security/Signature;	3.15;
 
-		// 86
+		// 85
 		staticMethodRef 3.11.0(BZ)Ljavacard/security/MessageDigest;;		// javacard/security/MessageDigest.getInstance(BZ)Ljavacard/security/MessageDigest;
 			.descriptor	Ljavacard/security/MessageDigest;	3.11;
 
-		// 87
+		// 86
 		classRef 3.9;		// javacard/security/RSAPublicKey
-		// 88
+		// 87
 		classRef OwnerPIN;
-		// 89
+		// 88
 		classRef 3.8;		// javacard/security/RSAPrivateKey
-		// 90
+		// 89
 		staticFieldRef byte[] demo/DEFAULT_PIN;
-		// 91
+		// 90
 		classRef 3.16;		// javacard/security/KeyPair
-		// 92
+		// 91
 		staticMethodRef 3.16.1(Ljavacard/security/PublicKey;Ljavacard/security/PrivateKey;)V;		// javacard/security/KeyPair.<init>(Ljavacard/security/PublicKey;Ljavacard/security/PrivateKey;)V
 			.descriptor	Ljavacard/security/PublicKey;	3.3;
 			.descriptor	Ljavacard/security/PrivateKey;	3.2;
 
-		// 93
+		// 92
 		virtualMethodRef 3.16.1()V;		// javacard/security/KeyPair.genKeyPair()V
-		// 94
+		// 93
 		virtualMethodRef 1.10.5([BSS)V;		// javacard/framework/APDU.sendBytesLong([BSS)V
-		// 95
+		// 94
 		virtualMethodRef 3.15.3(Ljavacard/security/Key;B)V;		// javacard/security/Signature.init(Ljavacard/security/Key;B)V
 			.descriptor	Ljavacard/security/Key;	3.0;
 
-		// 96
+		// 95
 		virtualMethodRef 3.15.5([BSS[BS)S;		// javacard/security/Signature.sign([BSS[BS)S
-		// 97
+		// 96
 		virtualMethodRef 3.15.7([BSS[BSS)Z;		// javacard/security/Signature.verify([BSS[BSS)Z
-		// 98
+		// 97
 		virtualMethodRef 1.10.8(SS)V;		// javacard/framework/APDU.setOutgoingAndSend(SS)V
 	}
 
@@ -298,7 +296,7 @@
 			.locals 0;
 
 				L0:	aload_0;
-					invokespecial 84;		// java/lang/Object.<init>()V
+					invokespecial 83;		// java/lang/Object.<init>()V
 					aload_0;
 					bspush 13;
 					sconst_0;
@@ -307,7 +305,7 @@
 					aload_0;
 					sconst_1;
 					sconst_0;
-					invokestatic 86;		// javacard/security/MessageDigest.getInstance(BZ)Ljavacard/security/MessageDigest;
+					invokestatic 85;		// javacard/security/MessageDigest.getInstance(BZ)Ljavacard/security/MessageDigest;
 					putfield_a 1;		// reference project/Encrypt.sha256
 					return;
 		}
@@ -386,7 +384,7 @@
 					sload 5;
 					aload_3;
 					sload 4;
-					invokevirtual 70;		// javacardx/crypto/Cipher.doFinal([BSS[BS)S
+					invokevirtual 69;		// javacardx/crypto/Cipher.doFinal([BSS[BS)S
 					pop;
 					return;
 		}
@@ -416,7 +414,7 @@
 			.locals 0;
 
 				L0:	aload_0;
-					invokespecial 84;		// java/lang/Object.<init>()V
+					invokespecial 83;		// java/lang/Object.<init>()V
 					aload_0;
 					sload_1;
 					putfield_b 2;		// byte project/OwnerPIN.triesRemaining
@@ -500,7 +498,7 @@
 			public byte[] pinHash 1;		// [B
 			private 2.1 cipher 2;		// Ljavacardx/crypto/Cipher;
 			private 3.20 aesKey 3;		// Ljavacard/security/AESKey;
-			private byte[] tempBuffer 4;		// [B
+			private byte[] template 4;		// [B
 			private byte[] in 5;		// [B
 			private byte[] enc_buffer 6;		// [B
 			private byte[] dec_buffer 7;		// [B
@@ -570,7 +568,7 @@
 					newarray 11;
 					putfield_a 5;		// reference project/demo.id
 					aload_0;
-					bspush 48;
+					bspush 16;
 					newarray 11;
 					putfield_a 6;		// reference project/demo.name
 					aload_0;
@@ -581,7 +579,7 @@
 					sconst_0;
 					putfield_b 8;		// byte project/demo.gender
 					aload_0;
-					bspush 112;
+					bspush 96;
 					newarray 11;
 					putfield_a 9;		// reference project/demo.address
 					aload_0;
@@ -595,25 +593,25 @@
 					aload_0;
 					bspush 50;
 					sconst_1;
-					invokestatic 71;		// javacard/framework/JCSystem.makeTransientByteArray(SB)[B
-					putfield_a 12;		// reference project/demo.tempBuffer
+					invokestatic 70;		// javacard/framework/JCSystem.makeTransientByteArray(SB)[B
+					putfield_a 12;		// reference project/demo.template
 					aload_0;
 					bspush 16;
 					newarray 11;
 					putfield_a 13;		// reference project/demo.pinHash
 					aload_0;
-					new 88;		// project/OwnerPIN
+					new 87;		// project/OwnerPIN
 					dup;
 					sconst_3;
-					getstatic_a 90;		// reference project/demo.DEFAULT_PIN
+					getstatic_a 89;		// reference project/demo.DEFAULT_PIN
 					arraylength;
 					s2b;
 					invokespecial 31;		// project/OwnerPIN.<init>(BB)V
 					putfield_a 14;		// reference project/demo.pin
 					getfield_a_this 14;		// reference project/demo.pin
-					getstatic_a 90;		// reference project/demo.DEFAULT_PIN
+					getstatic_a 89;		// reference project/demo.DEFAULT_PIN
 					sconst_0;
-					getstatic_a 90;		// reference project/demo.DEFAULT_PIN
+					getstatic_a 89;		// reference project/demo.DEFAULT_PIN
 					arraylength;
 					s2b;
 					invokevirtual 33;		// project/OwnerPIN.update([BSB)V
@@ -633,20 +631,20 @@
 					newarray 11;
 					putfield_a 18;		// reference project/demo.dec_buffer1
 					aload_0;
-					bspush 112;
+					bspush 96;
 					newarray 11;
 					putfield_a 19;		// reference project/demo.dec_buffer2
 					aload_0;
 					sconst_2;
 					sconst_0;
-					invokestatic 86;		// javacard/security/MessageDigest.getInstance(BZ)Ljavacard/security/MessageDigest;
+					invokestatic 85;		// javacard/security/MessageDigest.getInstance(BZ)Ljavacard/security/MessageDigest;
 					putfield_a 20;		// reference project/demo.sha256
 					getfield_a_this 20;		// reference project/demo.sha256
 					invokevirtual 38;		// javacard/security/MessageDigest.reset()V
 					getfield_a_this 20;		// reference project/demo.sha256
-					getstatic_a 90;		// reference project/demo.DEFAULT_PIN
+					getstatic_a 89;		// reference project/demo.DEFAULT_PIN
 					sconst_0;
-					getstatic_a 90;		// reference project/demo.DEFAULT_PIN
+					getstatic_a 89;		// reference project/demo.DEFAULT_PIN
 					arraylength;
 					getfield_a_this 13;		// reference project/demo.pinHash
 					sconst_0;
@@ -803,38 +801,50 @@
 
 		.method private encryptData([BS[BSSLjavacard/security/AESKey;)V {
 			.stack 6;
-			.locals 0;
+			.locals 1;
 
 			.descriptor	Ljavacard/security/AESKey;	3.20;
 
 				L0:	sload 5;
+					sconst_1;
+					if_scmpge L2;
+				L1:	sspush 27012;
+					invokestatic 47;		// javacard/framework/ISOException.throwIt(S)V
+				L2:	sload 5;
 					bspush 16;
 					srem;
-					ifeq L2;
-				L1:	aload_0;
-					aload_1;
-					sload_2;
-					sload 5;
-					invokespecial 53;		// project/demo.addPadding([BSS)V
-					sload 5;
-					bspush 16;
-					sload 5;
-					bspush 16;
-					srem;
-					ssub;
-					sadd;
-					sstore 5;
-				L2:	getfield_a_this 22;		// reference project/demo.cipher
+					sstore 7;
+				L3:	getfield_a_this 22;		// reference project/demo.cipher
 					aload 6;
 					sconst_2;
 					invokevirtual 65;		// javacardx/crypto/Cipher.init(Ljavacard/security/Key;B)V
-					getfield_a_this 22;		// reference project/demo.cipher
+					sload 7;
+					ifne L5;
+				L4:	getfield_a_this 22;		// reference project/demo.cipher
 					aload_1;
 					sload_2;
 					sload 5;
 					aload_3;
-					sload 4;
-					invokevirtual 70;		// javacardx/crypto/Cipher.doFinal([BSS[BS)S
+					sconst_0;
+					invokevirtual 69;		// javacardx/crypto/Cipher.doFinal([BSS[BS)S
+					pop;
+				L5:	getfield_a_this 22;		// reference project/demo.cipher
+					aload_1;
+					sload_2;
+					sload 5;
+					aload_3;
+					sconst_0;
+					invokevirtual 53;		// javacardx/crypto/Cipher.update([BSS[BS)S
+					pop;
+					getfield_a_this 22;		// reference project/demo.cipher
+					getfield_a_this 12;		// reference project/demo.template
+					sconst_0;
+					bspush 16;
+					sload 7;
+					ssub;
+					aload_3;
+					sconst_0;
+					invokevirtual 69;		// javacardx/crypto/Cipher.doFinal([BSS[BS)S
 					pop;
 					return;
 		}
@@ -845,7 +855,13 @@
 
 			.descriptor	Ljavacard/security/AESKey;	3.20;
 
-				L0:	getfield_a_this 22;		// reference project/demo.cipher
+				L0:	sload 5;
+					bspush 16;
+					srem;
+					ifeq L2;
+				L1:	sspush 27012;
+					invokestatic 47;		// javacard/framework/ISOException.throwIt(S)V
+				L2:	getfield_a_this 22;		// reference project/demo.cipher
 					aload 6;
 					sconst_1;
 					invokevirtual 65;		// javacardx/crypto/Cipher.init(Ljavacard/security/Key;B)V
@@ -855,7 +871,7 @@
 					sload 5;
 					aload_3;
 					sload 4;
-					invokevirtual 70;		// javacardx/crypto/Cipher.doFinal([BSS[BS)S
+					invokevirtual 69;		// javacardx/crypto/Cipher.doFinal([BSS[BS)S
 					pop;
 					return;
 		}
@@ -1021,7 +1037,7 @@
 					getfield_a_this 18;		// reference project/demo.dec_buffer1
 					arraylength;
 					invokespecial 57;		// project/demo.sendResponse(Ljavacard/framework/APDU;[BSS)V
-					goto L11;
+					goto_w L11;
 				L6:	aload_0;
 					aload_2;
 					sconst_1;
@@ -1052,10 +1068,19 @@
 					invokespecial 57;		// project/demo.sendResponse(Ljavacard/framework/APDU;[BSS)V
 					goto L11;
 				L8:	aload_0;
-					aload_2;
 					getfield_a_this 10;		// reference project/demo.phone
 					sconst_0;
+					getfield_a_this 17;		// reference project/demo.dec_buffer
+					sconst_0;
 					getfield_a_this 10;		// reference project/demo.phone
+					arraylength;
+					getfield_a_this 21;		// reference project/demo.aesKey
+					invokespecial 58;		// project/demo.decryptData([BS[BSSLjavacard/security/AESKey;)V
+					aload_0;
+					aload_2;
+					getfield_a_this 17;		// reference project/demo.dec_buffer
+					sconst_0;
+					getfield_a_this 17;		// reference project/demo.dec_buffer
 					arraylength;
 					invokespecial 57;		// project/demo.sendResponse(Ljavacard/framework/APDU;[BSS)V
 					goto L11;
@@ -1120,10 +1145,6 @@
 			.locals 0;
 
 				L0:	aload_0;
-					bspush 16;
-					newarray 11;
-					putfield_a 5;		// reference project/demo.id
-					aload_0;
 					bspush 50;
 					newarray 11;
 					putfield_a 6;		// reference project/demo.name
@@ -1146,6 +1167,10 @@
 					bspush 16;
 					newarray 11;
 					putfield_a 11;		// reference project/demo.balance
+					aload_0;
+					bspush 16;
+					newarray 11;
+					putfield_a 5;		// reference project/demo.id
 					return;
 		}
 
@@ -1253,7 +1278,7 @@
 			.locals 0;
 
 				L0:	aload_0;
-					invokespecial 84;		// java/lang/Object.<init>()V
+					invokespecial 83;		// java/lang/Object.<init>()V
 					aload_0;
 					bspush 14;
 					sconst_0;
@@ -1262,7 +1287,7 @@
 					aload_0;
 					bspush 16;
 					sconst_1;
-					invokestatic 71;		// javacard/framework/JCSystem.makeTransientByteArray(SB)[B
+					invokestatic 70;		// javacard/framework/JCSystem.makeTransientByteArray(SB)[B
 					putfield_a 24;		// reference project/AesConfig.template
 					return;
 		}
@@ -1294,7 +1319,7 @@
 					sload_3;
 					aload 5;
 					sconst_0;
-					invokevirtual 70;		// javacardx/crypto/Cipher.doFinal([BSS[BS)S
+					invokevirtual 69;		// javacardx/crypto/Cipher.doFinal([BSS[BS)S
 					pop;
 					aload 5;
 					areturn;
@@ -1304,7 +1329,7 @@
 					sload_3;
 					aload 5;
 					sconst_0;
-					invokevirtual 66;		// javacardx/crypto/Cipher.update([BSS[BS)S
+					invokevirtual 53;		// javacardx/crypto/Cipher.update([BSS[BS)S
 					pop;
 					getfield_a_this 23;		// reference project/AesConfig.cipher
 					getfield_a_this 24;		// reference project/AesConfig.template
@@ -1314,7 +1339,7 @@
 					ssub;
 					aload 5;
 					sconst_0;
-					invokevirtual 70;		// javacardx/crypto/Cipher.doFinal([BSS[BS)S
+					invokevirtual 69;		// javacardx/crypto/Cipher.doFinal([BSS[BS)S
 					pop;
 					aload 5;
 					areturn;
@@ -1342,7 +1367,7 @@
 					sload_3;
 					aload 5;
 					sload 6;
-					invokevirtual 70;		// javacardx/crypto/Cipher.doFinal([BSS[BS)S
+					invokevirtual 69;		// javacardx/crypto/Cipher.doFinal([BSS[BS)S
 					pop;
 					aload 5;
 					areturn;
@@ -1387,9 +1412,9 @@
 			.stack 5;
 			.locals 0;
 
-				L0:	new 67;		// project/rsa
+				L0:	new 66;		// project/rsa
 					dup;
-					invokespecial 68;		// project/rsa.<init>()V
+					invokespecial 67;		// project/rsa.<init>()V
 					aload_0;
 					sload_1;
 					sconst_1;
@@ -1397,7 +1422,7 @@
 					aload_0;
 					sload_1;
 					baload;
-					invokevirtual 69;		// javacard/framework/Applet.register([BSB)V
+					invokevirtual 68;		// javacard/framework/Applet.register([BSB)V
 					return;
 		}
 
@@ -1413,7 +1438,7 @@
 					aload_0;
 					getfield_s_this 25;		// short project/rsa.sigLen
 					sconst_2;
-					invokestatic 71;		// javacard/framework/JCSystem.makeTransientByteArray(SB)[B
+					invokestatic 70;		// javacard/framework/JCSystem.makeTransientByteArray(SB)[B
 					putfield_a 26;		// reference project/rsa.sig_buffer
 					return;
 		}
@@ -1425,21 +1450,21 @@
 			.descriptor	Ljavacard/framework/APDU;	1.10;
 
 				L0:	aload_0;
-					invokevirtual 72;		// javacard/framework/Applet.selectingApplet()Z
+					invokevirtual 71;		// javacard/framework/Applet.selectingApplet()Z
 					ifeq L2;
 				L1:	return;
-				L2:	getstatic_a 73;		// reference project/rsa.serverAID
+				L2:	getstatic_a 72;		// reference project/rsa.serverAID
 					sconst_0;
-					getstatic_a 73;		// reference project/rsa.serverAID
+					getstatic_a 72;		// reference project/rsa.serverAID
 					arraylength;
 					s2b;
-					invokestatic 74;		// javacard/framework/JCSystem.lookupAID([BSB)Ljavacard/framework/AID;
+					invokestatic 73;		// javacard/framework/JCSystem.lookupAID([BSB)Ljavacard/framework/AID;
 					astore_2;
 				L3:	aload_2;
 					sconst_0;
-					invokestatic 75;		// javacard/framework/JCSystem.getAppletShareableInterfaceObject(Ljavacard/framework/AID;B)Ljavacard/framework/Shareable;
-					checkcast 0 76;		// T_CLASSORINTERFACE project/masterInterface
-					checkcast 0 76;		// T_CLASSORINTERFACE project/masterInterface
+					invokestatic 74;		// javacard/framework/JCSystem.getAppletShareableInterfaceObject(Ljavacard/framework/AID;B)Ljavacard/framework/Shareable;
+					checkcast 0 75;		// T_CLASSORINTERFACE project/masterInterface
+					checkcast 0 75;		// T_CLASSORINTERFACE project/masterInterface
 					astore_3;
 				L4:	aload_1;
 					invokevirtual 46;		// javacard/framework/APDU.getBuffer()[B
@@ -1449,66 +1474,66 @@
 					baload;
 					stableswitch L27 0 6 L6 L9 L12 L15 L18 L21 L24;
 				L6:	aload_3;
-					invokeinterface 1 76 0;		// project/masterInterface
+					invokeinterface 1 75 0;		// project/masterInterface
 					ifeq L8;
 				L7:	sspush 27010;
 					invokestatic 47;		// javacard/framework/ISOException.throwIt(S)V
 				L8:	aload_0;
-					invokespecial 77;		// project/rsa.generateKeys()V
+					invokespecial 76;		// project/rsa.generateKeys()V
 					goto_w L28;
 				L9:	aload_3;
-					invokeinterface 1 76 0;		// project/masterInterface
+					invokeinterface 1 75 0;		// project/masterInterface
 					ifeq L11;
 				L10:	sspush 27010;
 					invokestatic 47;		// javacard/framework/ISOException.throwIt(S)V
 				L11:	aload_0;
 					aload_1;
-					invokespecial 78;		// project/rsa.sendModulus(Ljavacard/framework/APDU;)V
+					invokespecial 77;		// project/rsa.sendModulus(Ljavacard/framework/APDU;)V
 					goto L28;
 				L12:	aload_3;
-					invokeinterface 1 76 0;		// project/masterInterface
+					invokeinterface 1 75 0;		// project/masterInterface
 					ifeq L14;
 				L13:	sspush 27010;
 					invokestatic 47;		// javacard/framework/ISOException.throwIt(S)V
 				L14:	aload_0;
 					aload_1;
-					invokespecial 79;		// project/rsa.sendExponent(Ljavacard/framework/APDU;)V
+					invokespecial 78;		// project/rsa.sendExponent(Ljavacard/framework/APDU;)V
 					goto L28;
 				L15:	aload_3;
-					invokeinterface 1 76 0;		// project/masterInterface
+					invokeinterface 1 75 0;		// project/masterInterface
 					ifeq L17;
 				L16:	sspush 27010;
 					invokestatic 47;		// javacard/framework/ISOException.throwIt(S)V
 				L17:	aload_0;
 					aload_1;
-					invokespecial 80;		// project/rsa.encryptData(Ljavacard/framework/APDU;)V
+					invokespecial 79;		// project/rsa.encryptData(Ljavacard/framework/APDU;)V
 					goto L28;
 				L18:	aload_3;
-					invokeinterface 1 76 0;		// project/masterInterface
+					invokeinterface 1 75 0;		// project/masterInterface
 					ifeq L20;
 				L19:	sspush 27010;
 					invokestatic 47;		// javacard/framework/ISOException.throwIt(S)V
 				L20:	aload_0;
 					aload_1;
-					invokespecial 81;		// project/rsa.decryptData(Ljavacard/framework/APDU;)V
+					invokespecial 80;		// project/rsa.decryptData(Ljavacard/framework/APDU;)V
 					goto L28;
 				L21:	aload_3;
-					invokeinterface 1 76 0;		// project/masterInterface
+					invokeinterface 1 75 0;		// project/masterInterface
 					ifeq L23;
 				L22:	sspush 27010;
 					invokestatic 47;		// javacard/framework/ISOException.throwIt(S)V
 				L23:	aload_0;
 					aload_1;
-					invokespecial 82;		// project/rsa.signData(Ljavacard/framework/APDU;)V
+					invokespecial 81;		// project/rsa.signData(Ljavacard/framework/APDU;)V
 					goto L28;
 				L24:	aload_3;
-					invokeinterface 1 76 0;		// project/masterInterface
+					invokeinterface 1 75 0;		// project/masterInterface
 					ifeq L26;
 				L25:	sspush 27010;
 					invokestatic 47;		// javacard/framework/ISOException.throwIt(S)V
 				L26:	aload_0;
 					aload_1;
-					invokespecial 83;		// project/rsa.verifyData(Ljavacard/framework/APDU;)V
+					invokespecial 82;		// project/rsa.verifyData(Ljavacard/framework/APDU;)V
 					goto L28;
 				L27:	sspush 27904;
 					invokestatic 47;		// javacard/framework/ISOException.throwIt(S)V
@@ -1527,30 +1552,30 @@
 					aload_0;
 					bspush 10;
 					sconst_0;
-					invokestatic 85;		// javacard/security/Signature.getInstance(BZ)Ljavacard/security/Signature;
+					invokestatic 84;		// javacard/security/Signature.getInstance(BZ)Ljavacard/security/Signature;
 					putfield_a 28;		// reference project/rsa.rsaSig
 					aload_0;
 					sconst_4;
 					sspush 1024;
 					sconst_0;
 					invokestatic 40;		// javacard/security/KeyBuilder.buildKey(BSZ)Ljavacard/security/Key;
-					checkcast 0 87;		// T_CLASSORINTERFACE javacard/security/RSAPublicKey
+					checkcast 0 86;		// T_CLASSORINTERFACE javacard/security/RSAPublicKey
 					putfield_a 29;		// reference project/rsa.publicKey
 					aload_0;
 					sconst_5;
 					sspush 1024;
 					sconst_0;
 					invokestatic 40;		// javacard/security/KeyBuilder.buildKey(BSZ)Ljavacard/security/Key;
-					checkcast 0 89;		// T_CLASSORINTERFACE javacard/security/RSAPrivateKey
+					checkcast 0 88;		// T_CLASSORINTERFACE javacard/security/RSAPrivateKey
 					putfield_a 30;		// reference project/rsa.privateKey
-					new 91;		// javacard/security/KeyPair
+					new 90;		// javacard/security/KeyPair
 					dup;
 					getfield_a_this 29;		// reference project/rsa.publicKey
 					getfield_a_this 30;		// reference project/rsa.privateKey
-					invokespecial 92;		// javacard/security/KeyPair.<init>(Ljavacard/security/PublicKey;Ljavacard/security/PrivateKey;)V
+					invokespecial 91;		// javacard/security/KeyPair.<init>(Ljavacard/security/PublicKey;Ljavacard/security/PrivateKey;)V
 					astore_1;
 				L1:	aload_1;
-					invokevirtual 93;		// javacard/security/KeyPair.genKeyPair()V
+					invokevirtual 92;		// javacard/security/KeyPair.genKeyPair()V
 					return;
 		}
 
@@ -1565,7 +1590,7 @@
 				L1:	sspush 27013;
 					invokestatic 47;		// javacard/framework/ISOException.throwIt(S)V
 				L2:	getfield_a_this 29;		// reference project/rsa.publicKey
-					invokeinterface 1 87 1;		// javacard/security/RSAPublicKey
+					invokeinterface 1 86 1;		// javacard/security/RSAPublicKey
 					bspush 8;
 					sdiv;
 					newarray 11;
@@ -1573,7 +1598,7 @@
 				L3:	getfield_a_this 29;		// reference project/rsa.publicKey
 					aload_2;
 					sconst_0;
-					invokeinterface 3 87 5;		// javacard/security/RSAPublicKey
+					invokeinterface 3 86 5;		// javacard/security/RSAPublicKey
 					pop;
 					aload_1;
 					invokevirtual 59;		// javacard/framework/APDU.setOutgoing()S
@@ -1587,7 +1612,7 @@
 					sconst_0;
 					aload_2;
 					arraylength;
-					invokevirtual 94;		// javacard/framework/APDU.sendBytesLong([BSS)V
+					invokevirtual 93;		// javacard/framework/APDU.sendBytesLong([BSS)V
 					return;
 		}
 
@@ -1607,7 +1632,7 @@
 				L3:	getfield_a_this 29;		// reference project/rsa.publicKey
 					aload_2;
 					sconst_0;
-					invokeinterface 3 87 4;		// javacard/security/RSAPublicKey
+					invokeinterface 3 86 4;		// javacard/security/RSAPublicKey
 					pop;
 					aload_1;
 					invokevirtual 59;		// javacard/framework/APDU.setOutgoing()S
@@ -1621,7 +1646,7 @@
 					sconst_0;
 					aload_2;
 					arraylength;
-					invokevirtual 94;		// javacard/framework/APDU.sendBytesLong([BSS)V
+					invokevirtual 93;		// javacard/framework/APDU.sendBytesLong([BSS)V
 					return;
 		}
 
@@ -1650,7 +1675,7 @@
 					sload_3;
 					aload_2;
 					sconst_0;
-					invokevirtual 70;		// javacardx/crypto/Cipher.doFinal([BSS[BS)S
+					invokevirtual 69;		// javacardx/crypto/Cipher.doFinal([BSS[BS)S
 					sstore 5;
 				L4:	aload_1;
 					sload 5;
@@ -1659,7 +1684,7 @@
 					aload_2;
 					sconst_0;
 					sload 5;
-					invokevirtual 94;		// javacard/framework/APDU.sendBytesLong([BSS)V
+					invokevirtual 93;		// javacard/framework/APDU.sendBytesLong([BSS)V
 					return;
 		}
 
@@ -1688,7 +1713,7 @@
 					sload_3;
 					aload_2;
 					sconst_0;
-					invokevirtual 70;		// javacardx/crypto/Cipher.doFinal([BSS[BS)S
+					invokevirtual 69;		// javacardx/crypto/Cipher.doFinal([BSS[BS)S
 					sstore 5;
 				L4:	aload_1;
 					sload 5;
@@ -1697,7 +1722,7 @@
 					aload_2;
 					sconst_0;
 					sload 5;
-					invokevirtual 94;		// javacard/framework/APDU.sendBytesLong([BSS)V
+					invokevirtual 93;		// javacard/framework/APDU.sendBytesLong([BSS)V
 					return;
 		}
 
@@ -1716,14 +1741,14 @@
 				L2:	getfield_a_this 28;		// reference project/rsa.rsaSig
 					getfield_a_this 30;		// reference project/rsa.privateKey
 					sconst_1;
-					invokevirtual 95;		// javacard/security/Signature.init(Ljavacard/security/Key;B)V
+					invokevirtual 94;		// javacard/security/Signature.init(Ljavacard/security/Key;B)V
 					getfield_a_this 28;		// reference project/rsa.rsaSig
 					aload_2;
 					sconst_5;
 					sload_3;
 					getfield_a_this 26;		// reference project/rsa.sig_buffer
 					sconst_0;
-					invokevirtual 96;		// javacard/security/Signature.sign([BSS[BS)S
+					invokevirtual 95;		// javacard/security/Signature.sign([BSS[BS)S
 					pop;
 					aload_1;
 					invokevirtual 59;		// javacard/framework/APDU.setOutgoing()S
@@ -1735,7 +1760,7 @@
 					getfield_a_this 26;		// reference project/rsa.sig_buffer
 					sconst_0;
 					getfield_s_this 25;		// short project/rsa.sigLen
-					invokevirtual 94;		// javacard/framework/APDU.sendBytesLong([BSS)V
+					invokevirtual 93;		// javacard/framework/APDU.sendBytesLong([BSS)V
 					return;
 		}
 
@@ -1764,7 +1789,7 @@
 					sstore_3;
 					sload_3;
 					sconst_2;
-					invokestatic 71;		// javacard/framework/JCSystem.makeTransientByteArray(SB)[B
+					invokestatic 70;		// javacard/framework/JCSystem.makeTransientByteArray(SB)[B
 					astore 4;
 				L3:	sconst_5;
 					getfield_s_this 25;		// short project/rsa.sigLen
@@ -1780,7 +1805,7 @@
 					getfield_a_this 28;		// reference project/rsa.rsaSig
 					getfield_a_this 29;		// reference project/rsa.publicKey
 					sconst_2;
-					invokevirtual 95;		// javacard/security/Signature.init(Ljavacard/security/Key;B)V
+					invokevirtual 94;		// javacard/security/Signature.init(Ljavacard/security/Key;B)V
 					getfield_a_this 28;		// reference project/rsa.rsaSig
 					aload 4;
 					sconst_0;
@@ -1788,7 +1813,7 @@
 					getfield_a_this 26;		// reference project/rsa.sig_buffer
 					sconst_0;
 					getfield_s_this 25;		// short project/rsa.sigLen
-					invokevirtual 97;		// javacard/security/Signature.verify([BSS[BSS)Z
+					invokevirtual 96;		// javacard/security/Signature.verify([BSS[BSS)Z
 					sstore 6;
 				L5:	aload_2;
 					sconst_0;
@@ -1801,7 +1826,7 @@
 					aload_1;
 					sconst_0;
 					sconst_1;
-					invokevirtual 98;		// javacard/framework/APDU.setOutgoingAndSend(SS)V
+					invokevirtual 97;		// javacard/framework/APDU.setOutgoingAndSend(SS)V
 					return;
 		}
 

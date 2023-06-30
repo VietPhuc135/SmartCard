@@ -8,7 +8,7 @@ public class demo extends Applet implements masterInterface {
 	//ma hoa
 	private Cipher cipher;
 	private AESKey aesKey;
-	private byte[] tempBuffer;
+	private byte[] template;
 	private byte[] in, enc_buffer, dec_buffer, dec_buffer1, dec_buffer2;
 	private short keyLen;
 	 private Encrypt encryptor;
@@ -49,13 +49,13 @@ public class demo extends Applet implements masterInterface {
 	// Phng thc khi to
 	public demo() {
 		id = new byte[16];
-		name = new byte[48];
+		name = new byte[16];
 		birthdate = new byte[16];
 		gender = 0;
-		address = new byte[112];
+		address = new byte[96];
 		phone = new byte[16];
 		balance = new byte[16];
-		tempBuffer = JCSystem.makeTransientByteArray((short) 50, JCSystem.CLEAR_ON_RESET);
+		template = JCSystem.makeTransientByteArray((short) 50, JCSystem.CLEAR_ON_RESET);
 		pinHash = new byte[16];
 		// to mi i tng OwnerPIN
 		pin = new OwnerPIN(MAX_PIN_TRIES, (byte) DEFAULT_PIN.length);
@@ -71,14 +71,14 @@ public class demo extends Applet implements masterInterface {
 		enc_buffer = new byte[keyLen];
 		dec_buffer = new byte[48];
 		dec_buffer1 = new byte[16];
-		dec_buffer2 =  new byte[112];
+		dec_buffer2 =  new byte[96];
 
 		// ham bam
 		sha256 = MessageDigest.getInstance(MessageDigest.ALG_MD5,false);
 		sha256.reset();
 		sha256.doFinal(DEFAULT_PIN, (short) 0, (short) DEFAULT_PIN.length, pinHash, (short) 0);
 		 aesKey = (AESKey) KeyBuilder.buildKey(KeyBuilder.TYPE_AES_TRANSIENT_RESET, KeyBuilder.LENGTH_AES_128, false);
-        
+       
 		 cipher = Cipher.getInstance(javacardx.crypto.Cipher.ALG_AES_BLOCK_128_ECB_NOPAD, false);
  
 	}
@@ -151,32 +151,32 @@ public class demo extends Applet implements masterInterface {
     }
 
       private void encryptData(byte[] input, short inputOffset, byte[] output, short outputOffset, short length,AESKey aesKey) {
-      	 if (length % 16 != 0) {
-            addPadding(input, inputOffset, length);
-            length += (16 - (length % 16));
-        }
-        cipher.init(aesKey, Cipher.MODE_ENCRYPT);
-        cipher.doFinal(input, inputOffset, length, output, outputOffset);
+      
+        if(length <(short)1){
+			ISOException.throwIt(ISO7816.SW_DATA_INVALID);
+		}
+		byte residual =(byte)(length%16);
+		cipher.init(aesKey,Cipher.MODE_ENCRYPT);
+		if(residual==(byte)0x00){
+			cipher.doFinal(input,inputOffset,length,output,(short)0);
+			
+		}
+		cipher.update(input,inputOffset,length,output,(short)0);
+		cipher.doFinal(template,(short)0,(short)(16-residual),output,(short)0);
+		
     }
 
     // Gii mã d liu bng AES
     private void decryptData(byte[] input, short inputOffset, byte[] output, short outputOffset, short length,AESKey aesKey) {
-        cipher.init(aesKey, Cipher.MODE_DECRYPT);
-        cipher.doFinal(input, inputOffset, length, output, outputOffset);
+        // cipher.init(aesKey, Cipher.MODE_DECRYPT);
+        // cipher.doFinal(input, inputOffset, length, output, outputOffset);
+        if((short)(length%16)!=0){
+			ISOException.throwIt(ISO7816.SW_DATA_INVALID);
+		}
+		cipher.init(aesKey,javacardx.crypto.Cipher.MODE_DECRYPT);
+		cipher.doFinal(input, inputOffset, length, output, outputOffset);
+		
     }
-    private void decryptData2(byte[] input, short inputOffset, byte[] output, short outputOffset, short length, AESKey aesKey, byte[] output2) {
-    cipher.init(aesKey, Cipher.MODE_DECRYPT);
-    cipher.doFinal(input, inputOffset, length, output, outputOffset);
-
-    // Xóa padding
-    byte paddingLength = output[(short) (outputOffset + length - 1)];
-    short decryptedLength = (short) (length - paddingLength);
-    
-    // Sao chép d liu gii mã vào mng decryptedData
-    byte[] decryptedData = new byte[decryptedLength];
-    Util.arrayCopyNonAtomic(output, outputOffset, decryptedData, (short) 0, decryptedLength);
-}
-
     
     // X lý lnh WRITE DATA
     private void writeData(byte[] buffer, APDU apdu, short lc) {
@@ -195,15 +195,14 @@ public class demo extends Applet implements masterInterface {
         switch (tag) {
         	
 			case NAME_TAG:
-				// encryptData(buffer, offset, name, (short) 0, lc,aesKey);
+				encryptData(buffer, offset, name, (short) 0, lc,aesKey);
 				
-				while(lc > 0){
-					name =  encryptor.encryptData(buffer, offset,  name, lc, keyLen,aesKey);
-					Util.arrayCopy(buffer, offset, name, pointer, byteRead);
-					pointer += byteRead;
-					lc -= byteRead;
-					byteRead = apdu.receiveBytes(ISO7816.OFFSET_CDATA);
-				}
+				// while(lc > 0){
+									// Util.arrayCopy(buffer, offset, name, pointer, byteRead);
+					// pointer += byteRead;
+					// lc -= byteRead;
+					// byteRead = apdu.receiveBytes(ISO7816.OFFSET_CDATA);
+				// }
 				break;
 	
             case ID_TAG:
@@ -218,15 +217,15 @@ public class demo extends Applet implements masterInterface {
        
             case BIRTHDATE_TAG:
             	
-            		// encryptData(buffer, offset, birthdate, (short) 0, lc,aesKey);
-                while(lc > 0){
-                	byte[] bufd = apdu.getBuffer();
-					Util.arrayCopy(buffer, offset, birthdate, pointer, byteRead);
-					pointer += byteRead;
-					lc -= byteRead;
-					byteRead = apdu.receiveBytes(ISO7816.OFFSET_CDATA);
+            		encryptData(buffer, offset, birthdate, (short) 0, lc,aesKey);
+                // while(lc > 0){
+                	// byte[] bufd = apdu.getBuffer();
+					// Util.arrayCopy(buffer, offset, birthdate, pointer, byteRead);
+					// pointer += byteRead;
+					// lc -= byteRead;
+					// byteRead = apdu.receiveBytes(ISO7816.OFFSET_CDATA);
 				
-				}
+				// }
                 break;
             case GENDER_TAG:
                 gender = buffer[offset];
@@ -244,29 +243,29 @@ public class demo extends Applet implements masterInterface {
 				}
                 break;
             case PHONE_TAG:
-            			// encryptData(buffer, offset, phone, (short) 0, lc,aesKey);
+            			encryptData(buffer, offset, phone, (short) 0, lc,aesKey);
                // encryptor.encryptData(buffer, offset,  phone, lc, keyLen,DEFAULT_PIN);
-                while(lc > 0){
-                	byte[] bufp = apdu.getBuffer();
-					Util.arrayCopy(buffer, offset, phone, pointer, byteRead);
-					pointer += byteRead;
-					lc -= byteRead;
-					byteRead = apdu.receiveBytes(ISO7816.OFFSET_CDATA);
+                // while(lc > 0){
+                	
+					// Util.arrayCopy(buffer, offset, phone, pointer, byteRead);
+					// pointer += byteRead;
+					// lc -= byteRead;
+					// byteRead = apdu.receiveBytes(ISO7816.OFFSET_CDATA);
 					
-				}
+				// }
 				break;
 			case BALANCE_TAG:
-						// encryptData(buffer, offset, balance, (short) 0, lc,aesKey);
+						encryptData(buffer, offset, balance, (short) 0, lc,aesKey);
 				// encryptor.encryptData(buffer, offset,  balance, lc, keyLen,DEFAULT_PIN);
-				JCSystem.beginTransaction();
-				while(lc > 0){
-					byte[] bufb = apdu.getBuffer();
-					Util.arrayCopy(buffer, offset, balance, pointer, byteRead);
-					pointer += byteRead;
-					lc -= byteRead;
-					byteRead = apdu.receiveBytes(ISO7816.OFFSET_CDATA);
-				}
-				JCSystem.commitTransaction();
+				// JCSystem.beginTransaction();
+				// while(lc > 0){
+					// byte[] bufb = apdu.getBuffer();
+					// Util.arrayCopy(buffer, offset, balance, pointer, byteRead);
+					// pointer += byteRead;
+					// lc -= byteRead;
+					// byteRead = apdu.receiveBytes(ISO7816.OFFSET_CDATA);
+				// }
+				// JCSystem.commitTransaction();
 
 				break;
 			default:
@@ -288,38 +287,39 @@ public class demo extends Applet implements masterInterface {
                 sendResponse(apdu, id, (short)0, (short)id.length);
                 break;
             case NAME_TAG: 
-            	sendResponse(apdu, name, (short)0, (short)name.length);
+            	// // sendResponse(apdu, name, (short)0, (short)name.length);
+            	decryptData(name, (short) 0, dec_buffer, (short) 0, (short) name.length,aesKey);
 				// decryptData2(name, (short) 0, dec_buffer, (short) 0, (short) name.length,aesKey,);
-                // sendResponse(apdu, dec_buffer, (short) 0, (short) dec_buffer.length);
+                sendResponse(apdu, dec_buffer, (short) 0, (short) dec_buffer.length);
 				
                 break;
             case BIRTHDATE_TAG:
             	            	
-				// decryptData(birthdate, (short) 0, dec_buffer1, (short) 0, (short) birthdate.length,aesKey);
-                // sendResponse(apdu, dec_buffer1, (short) 0, (short) dec_buffer1.length);
+				decryptData(birthdate, (short) 0, dec_buffer1, (short) 0, (short) birthdate.length,aesKey);
+                sendResponse(apdu, dec_buffer1, (short) 0, (short) dec_buffer1.length);
                 
-                sendResponse(apdu, birthdate, (short)0, (short)birthdate.length);
+                // sendResponse(apdu, birthdate, (short)0, (short)birthdate.length);
                 break;
             case GENDER_TAG:
             	
                 sendResponse(apdu, new byte[] { gender }, (short)0, (short)1);
                 break;
             case ADDRESS_TAG:
-            			// decryptData(address, (short) 0, dec_buffer2, (short) 0, (short) address.length,aesKey);
+            	// decryptData(address, (short) 0, dec_buffer2, (short) 0, (short) address.length,aesKey);
                 // sendResponse(apdu, dec_buffer2, (short) 0, (short) dec_buffer2.length);
                 sendResponse(apdu, address, (short)0, (short)address.length);
                 break;
             case PHONE_TAG:
-            	// decryptData(phone, (short) 0, dec_buffer, (short) 0, (short) phone.length,aesKey);
-                // sendResponse(apdu, dec_buffer, (short) 0, (short) dec_buffer.length);
+            	decryptData(phone, (short) 0, dec_buffer, (short) 0, (short) phone.length,aesKey);
+                sendResponse(apdu, dec_buffer, (short) 0, (short) dec_buffer.length);
              
-                sendResponse(apdu, phone, (short)0, (short)phone.length);
+                // sendResponse(apdu, phone, (short)0, (short)phone.length);
                 break;
             case BALANCE_TAG:
-            	// decryptData(balance, (short) 0, dec_buffer1, (short) 0, (short) balance.length,aesKey);
-                // sendResponse(apdu, dec_buffer1, (short) 0, (short) dec_buffer1.length);
+            	decryptData(balance, (short) 0, dec_buffer1, (short) 0, (short) balance.length,aesKey);
+                sendResponse(apdu, dec_buffer1, (short) 0, (short) dec_buffer1.length);
              
-                sendResponse(apdu, balance, (short)0, (short)balance.length);
+                // sendResponse(apdu, balance, (short)0, (short)balance.length);
                 break;
             default:
                 // Nu tag không hp l, gi mã li tr v
