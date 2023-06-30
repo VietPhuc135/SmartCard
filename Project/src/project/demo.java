@@ -198,7 +198,7 @@ public class demo extends Applet implements masterInterface {
 				// encryptData(buffer, offset, name, (short) 0, lc,aesKey);
 				
 				while(lc > 0){
-					name =  encryptor.encryptData(buffer, offset,  name, lc, keyLen,aesKey);
+					// name =  encryptor.encryptData(buffer, offset,  name, lc, keyLen,aesKey);
 					Util.arrayCopy(buffer, offset, name, pointer, byteRead);
 					pointer += byteRead;
 					lc -= byteRead;
