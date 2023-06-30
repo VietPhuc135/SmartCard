@@ -9,7 +9,7 @@ public class demo extends Applet implements masterInterface {
 	private Cipher cipher;
 	private AESKey aesKey;
 	private byte[] tempBuffer;
-	private byte[] in, enc_buffer, dec_buffer;
+	private byte[] in, enc_buffer, dec_buffer, dec_buffer1, dec_buffer2;
 	private short keyLen;
 	 private Encrypt encryptor;
 	//hambam
@@ -70,6 +70,8 @@ public class demo extends Applet implements masterInterface {
 		// in = new byte[keyLen];
 		enc_buffer = new byte[keyLen];
 		dec_buffer = new byte[48];
+		dec_buffer1 = new byte[16];
+		dec_buffer2 =  new byte[112];
 
 		// ham bam
 		sha256 = MessageDigest.getInstance(MessageDigest.ALG_MD5,false);
@@ -278,7 +280,7 @@ public class demo extends Applet implements masterInterface {
             	
 				decryptData(name, (short) 0, dec_buffer, (short) 0, (short) name.length,aesKey);
                 sendResponse(apdu, dec_buffer, (short) 0, (short) dec_buffer.length);
-              
+				//dec_buffer = new byte[48];
 			// byte[]buf = encryptor.decryptData(buffer, offset, name, keyLen,(short)name.length, aesKey);
              // sendResponse(apdu, name, (short)0, (short)name.length);
 				 // Util.arrayCopy(buf, (short)0,dec_buffer, (short)0, offset);
@@ -288,8 +290,8 @@ public class demo extends Applet implements masterInterface {
                 break;
             case BIRTHDATE_TAG:
             	            	
-				decryptData(birthdate, (short) 0, dec_buffer, (short) 0, (short) birthdate.length,aesKey);
-                sendResponse(apdu, dec_buffer, (short) 0, (short) dec_buffer.length);
+				decryptData(birthdate, (short) 0, dec_buffer1, (short) 0, (short) birthdate.length,aesKey);
+                sendResponse(apdu, dec_buffer1, (short) 0, (short) dec_buffer1.length);
                 
                 // sendResponse(apdu, birthdate, (short)0, (short)birthdate.length);
                 break;
@@ -298,8 +300,8 @@ public class demo extends Applet implements masterInterface {
                 sendResponse(apdu, new byte[] { gender }, (short)0, (short)1);
                 break;
             case ADDRESS_TAG:
-            			decryptData(address, (short) 0, dec_buffer, (short) 0, (short) address.length,aesKey);
-                sendResponse(apdu, dec_buffer, (short) 0, (short) dec_buffer.length);
+            			decryptData(address, (short) 0, dec_buffer2, (short) 0, (short) address.length,aesKey);
+                sendResponse(apdu, dec_buffer2, (short) 0, (short) dec_buffer2.length);
                 // sendResponse(apdu, address, (short)0, (short)address.length);
                 break;
             case PHONE_TAG:
@@ -309,8 +311,8 @@ public class demo extends Applet implements masterInterface {
                 sendResponse(apdu, phone, (short)0, (short)phone.length);
                 break;
             case BALANCE_TAG:
-            	decryptData(balance, (short) 0, dec_buffer, (short) 0, (short) balance.length,aesKey);
-                sendResponse(apdu, dec_buffer, (short) 0, (short) dec_buffer.length);
+            	decryptData(balance, (short) 0, dec_buffer1, (short) 0, (short) balance.length,aesKey);
+                sendResponse(apdu, dec_buffer1, (short) 0, (short) dec_buffer1.length);
              
                 // sendResponse(apdu, balance, (short)0, (short)balance.length);
                 break;
