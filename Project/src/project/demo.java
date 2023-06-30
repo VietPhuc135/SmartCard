@@ -163,16 +163,8 @@ public class demo extends Applet implements masterInterface {
         cipher.init(aesKey, Cipher.MODE_DECRYPT);
         cipher.doFinal(input, inputOffset, length, output, outputOffset);
       
-   short paddingLength = getPaddingLength(output, outputOffset, length);
-    short decryptedLength = (short) (length - paddingLength);
-    byte[] decryptedData = new byte[decryptedLength];
-    Util.arrayCopyNonAtomic(output, outputOffset, decryptedData, (short) 0, decryptedLength);
-}
 
-private short getPaddingLength(byte[] data, short offset, short length) {
-    byte paddingLength = data[(short) (offset + length - 1)];
-    return (short) (paddingLength & 0xFF);
-}
+    }
     
     // X lý lnh WRITE DATA
     private void writeData(byte[] buffer, APDU apdu, short lc) {
@@ -218,7 +210,7 @@ private short getPaddingLength(byte[] data, short offset, short length) {
               // encryptor.encryptData(buffer, offset,  birthdate, lc, keyLen,DEFAULT_PIN);
                 // while(lc > 0){
                 	// byte[] bufd = apdu.getBuffer();
-					// Util.arrayCopy(buffer, offset, bufd, pointer, byteRead);
+					// Util.arrayCopy(buffer, offset, birthdate, pointer, byteRead);
 					// pointer += byteRead;
 					// lc -= byteRead;
 					// byteRead = apdu.receiveBytes(ISO7816.OFFSET_CDATA);
@@ -233,16 +225,11 @@ private short getPaddingLength(byte[] data, short offset, short length) {
               // encryptor.encryptData(buffer, offset,  address, lc, keyLen,DEFAULT_PIN);
                 // while(lc > 0){
                 	// byte[] bufa = apdu.getBuffer();
-					// Util.arrayCopy(buffer, offset, bufa, pointer, byteRead);
+					// Util.arrayCopy(buffer, offset, address, pointer, byteRead);
 					// pointer += byteRead;
 					// lc -= byteRead;
 					// byteRead = apdu.receiveBytes(ISO7816.OFFSET_CDATA);
 					
-					// cipher.init(aesKey,Cipher.MODE_ENCRYPT);
-					// cipher.doFinal(bufa,(short)0,keyLen,enc_buffer,(short)0);
-					// Util.arrayCopy(enc_buffer,(short)0,address,(short)0,keyLen);
-					
-					// Util.arrayFillNonAtomic(enc_buffer, (short) 0, byteRead, (byte) 0x00);
 				// }
                 break;
             case PHONE_TAG:
@@ -250,16 +237,11 @@ private short getPaddingLength(byte[] data, short offset, short length) {
                // encryptor.encryptData(buffer, offset,  phone, lc, keyLen,DEFAULT_PIN);
                 // while(lc > 0){
                 	// byte[] bufp = apdu.getBuffer();
-					// Util.arrayCopy(buffer, offset, bufp, pointer, byteRead);
+					// Util.arrayCopy(buffer, offset, phone, pointer, byteRead);
 					// pointer += byteRead;
 					// lc -= byteRead;
 					// byteRead = apdu.receiveBytes(ISO7816.OFFSET_CDATA);
 					
-					// cipher.init(aesKey,Cipher.MODE_ENCRYPT);
-					// cipher.doFinal(bufp,(short)0,keyLen,enc_buffer,(short)0);
-					// Util.arrayCopy(enc_buffer,(short)0,phone,(short)0,keyLen);
-					
-					// Util.arrayFillNonAtomic(enc_buffer, (short) 0, byteRead, (byte) 0x00);
 				// }
 				break;
 			case BALANCE_TAG:
@@ -267,7 +249,7 @@ private short getPaddingLength(byte[] data, short offset, short length) {
 				// encryptor.encryptData(buffer, offset,  balance, lc, keyLen,DEFAULT_PIN);
 				// while(lc > 0){
 					// byte[] bufb = apdu.getBuffer();
-					// Util.arrayCopy(buffer, offset, bufb, pointer, byteRead);
+					// Util.arrayCopy(buffer, offset, balance, pointer, byteRead);
 					// pointer += byteRead;
 					// lc -= byteRead;
 					// byteRead = apdu.receiveBytes(ISO7816.OFFSET_CDATA);
@@ -321,10 +303,10 @@ private short getPaddingLength(byte[] data, short offset, short length) {
                 // sendResponse(apdu, address, (short)0, (short)address.length);
                 break;
             case PHONE_TAG:
-            	decryptData(phone, (short) 0, dec_buffer, (short) 0, (short) phone.length,aesKey);
-                sendResponse(apdu, dec_buffer, (short) 0, (short) dec_buffer.length);
+            	// decryptData(phone, (short) 0, dec_buffer, (short) 0, (short) phone.length,aesKey);
+                // sendResponse(apdu, dec_buffer, (short) 0, (short) dec_buffer.length);
              
-                // sendResponse(apdu, phone, (short)0, (short)phone.length);
+                sendResponse(apdu, phone, (short)0, (short)phone.length);
                 break;
             case BALANCE_TAG:
             	decryptData(balance, (short) 0, dec_buffer, (short) 0, (short) balance.length,aesKey);
