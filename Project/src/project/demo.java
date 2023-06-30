@@ -24,6 +24,8 @@ public class demo extends Applet implements masterInterface {
 	private static final byte ADDRESS_TAG = 0x05;
 	private static final byte PHONE_TAG = 0x06;
 	private static final byte BALANCE_TAG = 0x07;
+	private final static byte INS_SETIMG = (byte) 0x12;
+    private final static byte INS_GETIMG = (byte) 0x13;
 
 	private static final byte[] DEFAULT_PIN = { 0x01, 0x02, 0x03, 0x04 }; // m PIN mc nh
 	private static final byte MAX_PIN_TRIES = 3; // s ln nhp sai cho php
@@ -46,6 +48,11 @@ public class demo extends Applet implements masterInterface {
 	private byte[] phone;
 	private byte[] balance;
 
+	//image
+    private byte[] image1,image2,image3,image4;
+    private short imagelen1,imagelen2,imagelen3,imagelen4, lenback1, lenback2, lenback3,lenback4, pointer1,pointer2, pointer3, pointer4;
+    public static final short MAX_LENGTH = (short)(0x7FFF);
+	
 	// Phng thc khi to
 	public demo() {
 		id = new byte[16];
@@ -77,9 +84,14 @@ public class demo extends Applet implements masterInterface {
 		sha256 = MessageDigest.getInstance(MessageDigest.ALG_MD5,false);
 		sha256.reset();
 		sha256.doFinal(DEFAULT_PIN, (short) 0, (short) DEFAULT_PIN.length, pinHash, (short) 0);
-		 aesKey = (AESKey) KeyBuilder.buildKey(KeyBuilder.TYPE_AES_TRANSIENT_RESET, KeyBuilder.LENGTH_AES_128, false);
+		aesKey = (AESKey) KeyBuilder.buildKey(KeyBuilder.TYPE_AES_TRANSIENT_RESET, KeyBuilder.LENGTH_AES_128, false);
         
-		 cipher = Cipher.getInstance(javacardx.crypto.Cipher.ALG_AES_BLOCK_128_ECB_NOPAD, false);
+		cipher = Cipher.getInstance(javacardx.crypto.Cipher.ALG_AES_BLOCK_128_ECB_NOPAD, false);
+		 
+		image1 = new byte[MAX_LENGTH];
+        image2 = new byte[MAX_LENGTH];
+        image3 = new byte[MAX_LENGTH];
+        image4 = new byte[MAX_LENGTH];
  
 	}
 
