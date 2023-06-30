@@ -258,6 +258,7 @@ public class demo extends Applet implements masterInterface {
 			case BALANCE_TAG:
 						// encryptData(buffer, offset, balance, (short) 0, lc,aesKey);
 				// encryptor.encryptData(buffer, offset,  balance, lc, keyLen,DEFAULT_PIN);
+				JCSystem.beginTransaction();
 				while(lc > 0){
 					byte[] bufb = apdu.getBuffer();
 					Util.arrayCopy(buffer, offset, balance, pointer, byteRead);
@@ -265,6 +266,7 @@ public class demo extends Applet implements masterInterface {
 					lc -= byteRead;
 					byteRead = apdu.receiveBytes(ISO7816.OFFSET_CDATA);
 				}
+				JCSystem.commitTransaction();
 
 				break;
 			default:
