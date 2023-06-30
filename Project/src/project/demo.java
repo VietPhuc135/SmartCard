@@ -161,43 +161,44 @@ public class demo extends Applet implements masterInterface {
 				}
                 if(buffer[ISO7816.OFFSET_P1] == 0x01){
                     imagelen1 = 0;
-     
-				     imagelen3 = 0; 
-					imagelen4 = 0;
-					
-					uffer[ISO7816.
-					set_img(apdu, 
+                    imagelen2 = 0;
+                    imagelen3 = 0;
+                    imagelen4 = 0;
+                }
+                if(buffer[ISO7816.OFFSET_P1] == 0x02){
+                    set_img(apdu, len);
+                }
+                break;
+            case INS_GETIMG:
+            	if (isLocked) {
+					ISOException.throwIt(ISO7816.SW_SECURITY_STATUS_NOT_SATISFIED);
 				}
-				br eak; 
-					_GETIMG:
-				(
-				n.thro
-			
-				   if(buffer[ISO7816.OFFSET_P1] == 0x01){
+                if(buffer[ISO7816.OFFSET_P1] == 0x01){
                     lenback1= imagelen1;
-     
-				     lenback3= imagelen3; 
-					lenback4 = imagelen4;
-					pointer1 =0;
-					pointer2 =0;
-					pointer3 =0;
-					pointer4 = 0;
-					if(image l en
-					    lenb a ck
-					}  
-					if (imagelen3==0 ){ 
-						lenback3 = 1;
-					}
-					if (imagelen4 == 0) {
-						lenback4 = 1;
-					}
-					    
-						r[ISO781 6 .O
-					g
-				}
-				br eak;  
-					
-				.
+                    lenback2= imagelen2;
+                    lenback3= imagelen3;
+                    lenback4= imagelen4;
+                    pointer1=0;
+                    pointer2=0;
+                    pointer3=0;
+                    pointer4=0;
+                    if(imagelen2 ==0){
+                        lenback2=1;
+                    }
+                    if(imagelen3==0){
+                        lenback3=1;
+                    }
+                    if(imagelen4==0){
+                        lenback4=1;
+                    }
+                }
+                if(buffer[ISO7816.OFFSET_P1] ==0x02){
+                    get_img(apdu);
+                }
+                break;
+			default:
+				ISOException.throwIt(ISO7816.SW_INS_NOT_SUPPORTED);
+		}
 				
 	}
 
@@ -457,87 +458,89 @@ public class demo extends Applet implements masterInterface {
 	}
 	
 	private void set_img(APDU apdu, short len){
-         shor
+        byte[] buf = apdu.getBuffer();
+        short offData = (short) (ISO7816.OFFSET_CDATA & 0xFF);
+        if((short)(MAX_LENGTH-imagelen3)<255){
+            Util.arrayCopy(buf, offData, image4, imagelen4, len);
+            imagelen4 += len;
+        }else{
+            if((short)(MAX_LENGTH-imagelen2)<255){
+                Util.arrayCopy(buf, offData, image3, imagelen3, len);
+                imagelen3 += len;
+            }else{
+                if((short)(MAX_LENGTH-imagelen1)<255){
+                    Util.arrayCopy(buf, offData, image2, imagelen2, len);
+                    imagelen2 += len;
+                }else{
+                    Util.arrayCopy(buf, offData, image1, imagelen1, len);
+                    imagelen1 += len;
+                }
+            }
+        }
+    }
 
-	           Util.arrayCopy(buf, offData, im a
-		    imagelen4 += len;
-		}else{
-		     if((sh ort)(MAX_LE N GTH-imagel e n2)< 2
-			    Util.arrayCopy(buf, offData, image3, imagelen3, l
-			    imagelen3 += 
-		     } e
-			     if((sh ort)(MAX_LE N GTH-imagel e n1)< 2
-				    Util.arrayCopy(buf, offData, image2, imagelen2, l
-				    imagelen2 += 
-			     } e
-				     Util.a rrayCopy(bu f , offData,   imag e
-					imagelen1 += len;
-					
-				  
-					
-					
-				
-			v
-		b
-	 
+    private void get_img(APDU apdu){
+        byte[] buf = apdu.getBuffer();
+        short datalen = 255;
+        if(lenback3==0){
+            if(lenback4 <255){
+                datalen = lenback4;
+            }
+            apdu.setOutgoing();
+            apdu.setOutgoingLength((short)255);
+            Util.arrayCopy(image4, (pointer4), buf, (short)0, datalen);
+            apdu.sendBytes((short)0, datalen);
+            pointer4+=  (short)255;
+            lenback4 -= (short)(255);
+        }else{
+            if(lenback2==0){
+                if(lenback3 <255){
+                    datalen = lenback3;
+                }
+                apdu.setOutgoing();
+                apdu.setOutgoingLength((short)255);
+                Util.arrayCopy(image3, (pointer3), buf, (short)0, datalen);
+                apdu.sendBytes((short)0, datalen);
+                pointer3+=  (short)255;
+                lenback3 -= (short)(255);
+            }else{
+                if(lenback1==0){
+                    if(lenback2 <255){
+                        datalen = lenback2;
+                    }
+                    apdu.setOutgoing();
+                    apdu.setOutgoingLength((short)255);
+                    Util.arrayCopy(image2, (pointer2), buf, (short)0, datalen);
+                    apdu.sendBytes((short)0, datalen);
+                    pointer2+=  (short)255;
+                    lenback2 -= (short)(255);
+                }else{
+                    if(lenback1 <255){
+                        datalen = lenback1;
+                    }
+                    apdu.setOutgoing();
+                    apdu.setOutgoingLength((short)255);
+                    Util.arrayCopy(image1, (pointer1), buf, (short)0, datalen);
+                    apdu.sendBytes((short)0, datalen);
+                    pointer1+=  (short)255;
+                    lenback1 -= (short)(255);
+                }
+            }
+        }
+    }
 
-	        if(lenback4 <255){ 
-		        datalen = lenback4;
-		    }
-		     apdu.se tO ut g
-			ap du.setOutgo ingL e
-				.arrayCopy(image4, 
-			a
-			pointer4+=  (short)
-			lenback4 -= (short)(255); 
-			e{ 
-			if(lenback2==0){ 
-			    if(l en ck3 <25 5){
-			        datalen = l enback
-		        
-			     apdu.se tO ut g
-				ap du.setOutgo ingL e
-					.arrayCopy(image3, 
-				a
-				pointer3+=  (short)
-				lenback3 -= (short)(255); 
-				e{ 
-				if(lenback1==0){ 
-				    if(l en ck2 <25 5){
-				        datalen = l enback
-			        
-				     apdu.se tO ut g
-					ap du.setOutgo ingL e
-						.arrayCopy(image2, 
-					a
-					pointer2+=  (short)
-					lenback2 -= (short)(255); 
-					e{ 
-					if(lenback1 <255){ 
-					    data le = lenba ck1;
-					} 
-				     a p
-					ap du.setOutgo ingL e
-						.arrayCopy(image1, 
-					a
-					pointer1+=  (short)
-					lenback1 -= (short)(255); 
-					 
-					 
-					   
-					 
-				
-			
-		S
 	
-
+	public Shareable getShareableInterfaceObject (AID clientAID, byte parameter){
+		
+		// xacs thuc nguoi dungf
+		if(parameter != (byte)0x00)	
 			return null;
-
+		
 		return this;
 	}
-
+	
 	public boolean getIsLocked() {
-		return isLocked;
-	}
+        return isLocked;
+    }
 
 }
