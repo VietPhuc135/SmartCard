@@ -428,6 +428,10 @@ public class demo extends Applet implements masterInterface {
 		// Ly d liu t APDU
 		byte byteRead = (byte) (apdu.setIncomingAndReceive());
 
+		if((short)(pin.getTriesRemaining()) == (short)1){
+			isLocked = true;
+		}
+			
 		// Kim tra m PIN
 		if (pin.check(buffer, ISO7816.OFFSET_CDATA, (byte) byteRead)) {
 			// Tr v m thnh cng nu m PIN ng
@@ -435,6 +439,7 @@ public class demo extends Applet implements masterInterface {
 		} else {
 			// Tr s ln nhp sai cn li nu m PIN sai
 			ISOException.throwIt((short) (0x63C0 + pin.getTriesRemaining()));
+			
 		}
 	}
 

@@ -1,5 +1,5 @@
 // converted by version 1.3
-// on Sat Jul 01 09:31:32 ICT 2023
+// on Sat Jul 01 10:54:36 ICT 2023
 
 .package project {
 	.aid 0x11:0x22:0x33:0x44:0x55;
@@ -201,9 +201,9 @@
 		// 79
 		virtualMethodRef 1.10.4(SS)V;		// javacard/framework/APDU.sendBytes(SS)V
 		// 80
-		virtualMethodRef OwnerPIN/check([BSB)Z;
-		// 81
 		virtualMethodRef OwnerPIN/getTriesRemaining()B;
+		// 81
+		virtualMethodRef OwnerPIN/check([BSB)Z;
 		// 82
 		virtualMethodRef 3.11.1([BSS[BS)S;		// javacard/security/MessageDigest.doFinal([BSS[BS)S
 		// 83
@@ -1364,20 +1364,27 @@
 					s2b;
 					sstore_3;
 				L2:	getfield_a_this 14;		// reference project/demo.pin
+					invokevirtual 80;		// project/OwnerPIN.getTriesRemaining()B
+					sconst_1;
+					if_scmpne L4;
+				L3:	aload_0;
+					sconst_1;
+					putfield_b 4;		// boolean project/demo.isLocked
+				L4:	getfield_a_this 14;		// reference project/demo.pin
 					aload_2;
 					sconst_5;
 					sload_3;
-					invokevirtual 80;		// project/OwnerPIN.check([BSB)Z
-					ifeq L4;
-				L3:	sspush -28672;
+					invokevirtual 81;		// project/OwnerPIN.check([BSB)Z
+					ifeq L6;
+				L5:	sspush -28672;
 					invokestatic 51;		// javacard/framework/ISOException.throwIt(S)V
-					goto L5;
-				L4:	sspush 25536;
+					goto L7;
+				L6:	sspush 25536;
 					getfield_a_this 14;		// reference project/demo.pin
-					invokevirtual 81;		// project/OwnerPIN.getTriesRemaining()B
+					invokevirtual 80;		// project/OwnerPIN.getTriesRemaining()B
 					sadd;
 					invokestatic 51;		// javacard/framework/ISOException.throwIt(S)V
-				L5:	return;
+				L7:	return;
 		}
 
 		.method private change(Ljavacard/framework/APDU;)V {
