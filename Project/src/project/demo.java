@@ -94,9 +94,6 @@ public class demo extends Applet implements masterInterface {
         image3 = new byte[MAX_LENGTH];
         image4 = new byte[MAX_LENGTH];
  
-
-		cipher = Cipher.getInstance(javacardx.crypto.Cipher.ALG_AES_BLOCK_128_ECB_NOPAD, false);
-
 	}
 
 	public static void install(byte[] bArray, short bOffset, byte bLength) {
@@ -111,7 +108,6 @@ public class demo extends Applet implements masterInterface {
 
 		// Ly cc byte d liu t APDU buffer
 		byte[] buffer = apdu.getBuffer();
-		short len = apdu.setIncomingAndReceive();
 
 		short lc = (short) (buffer[ISO7816.OFFSET_LC] & 0xFF);
 
@@ -159,6 +155,8 @@ public class demo extends Applet implements masterInterface {
 				if (isLocked) {
 					ISOException.throwIt(ISO7816.SW_SECURITY_STATUS_NOT_SATISFIED);
 				}
+				short len = apdu.setIncomingAndReceive();
+
                 if(buffer[ISO7816.OFFSET_P1] == 0x01){
                     imagelen1 = 0;
                     imagelen2 = 0;
@@ -173,6 +171,8 @@ public class demo extends Applet implements masterInterface {
             	if (isLocked) {
 					ISOException.throwIt(ISO7816.SW_SECURITY_STATUS_NOT_SATISFIED);
 				}
+				short leng = apdu.setIncomingAndReceive();
+
                 if(buffer[ISO7816.OFFSET_P1] == 0x01){
                     lenback1= imagelen1;
                     lenback2= imagelen2;

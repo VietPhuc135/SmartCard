@@ -1,5 +1,5 @@
 // converted by version 1.3
-// on Sat Jul 01 02:17:00 ICT 2023
+// on Sat Jul 01 09:31:32 ICT 2023
 
 .package project {
 	.aid 0x11:0x22:0x33:0x44:0x55;
@@ -121,27 +121,27 @@
 		// 50
 		virtualMethodRef 1.10.1()[B;		// javacard/framework/APDU.getBuffer()[B
 		// 51
-		virtualMethodRef 1.10.6()S;		// javacard/framework/APDU.setIncomingAndReceive()S
-		// 52
 		staticMethodRef 1.7.1(S)V;		// javacard/framework/ISOException.throwIt(S)V
-		// 53
+		// 52
 		staticMethodRef demo/writeData([BLjavacard/framework/APDU;S)V;
 			.descriptor	Ljavacard/framework/APDU;	1.10;
 
-		// 54
+		// 53
 		staticMethodRef demo/readData([BLjavacard/framework/APDU;)V;
 			.descriptor	Ljavacard/framework/APDU;	1.10;
 
-		// 55
+		// 54
 		staticMethodRef demo/resetData()V;
-		// 56
+		// 55
 		staticMethodRef demo/verify(Ljavacard/framework/APDU;)V;
 			.descriptor	Ljavacard/framework/APDU;	1.10;
 
-		// 57
+		// 56
 		staticMethodRef demo/change(Ljavacard/framework/APDU;)V;
 			.descriptor	Ljavacard/framework/APDU;	1.10;
 
+		// 57
+		virtualMethodRef 1.10.6()S;		// javacard/framework/APDU.setIncomingAndReceive()S
 		// 58
 		staticMethodRef 0.0.0()V;		// java/lang/Object.<init>()V
 		// 59
@@ -737,11 +737,6 @@
 					sspush 32767;
 					newarray 11;
 					putfield_a 26;		// reference project/demo.image4
-					aload_0;
-					bspush 14;
-					sconst_0;
-					invokestatic 69;		// javacardx/crypto/Cipher.getInstance(BZ)Ljavacardx/crypto/Cipher;
-					putfield_a 22;		// reference project/demo.cipher
 					return;
 		}
 
@@ -765,7 +760,7 @@
 
 		.method public process(Ljavacard/framework/APDU;)V 7 {
 			.stack 4;
-			.locals 3;
+			.locals 4;
 
 			.descriptor	Ljavacard/framework/APDU;	1.10;
 
@@ -776,73 +771,73 @@
 				L2:	aload_1;
 					invokevirtual 50;		// javacard/framework/APDU.getBuffer()[B
 					astore_2;
-				L3:	aload_1;
-					invokevirtual 51;		// javacard/framework/APDU.setIncomingAndReceive()S
-					sstore_3;
-				L4:	aload_2;
+				L3:	aload_2;
 					sconst_4;
 					baload;
 					sspush 255;
 					sand;
-					sstore 4;
-				L5:	aload_2;
+					sstore_3;
+				L4:	aload_2;
 					sconst_1;
 					baload;
-					stableswitch L40 1 19 L6 L9 L12 L15 L18 L21 L22 L40 L40 L40 L40 L40 L40 L40 L40 L40 L40 L23 L29;
-				L6:	getfield_b_this 4;		// boolean project/demo.isLocked
-					ifeq L8;
-				L7:	sspush 27010;
-					invokestatic 52;		// javacard/framework/ISOException.throwIt(S)V
-				L8:	aload_0;
+					stableswitch L41 1 19 L5 L8 L11 L14 L17 L20 L21 L41 L41 L41 L41 L41 L41 L41 L41 L41 L41 L22 L29;
+				L5:	getfield_b_this 4;		// boolean project/demo.isLocked
+					ifeq L7;
+				L6:	sspush 27010;
+					invokestatic 51;		// javacard/framework/ISOException.throwIt(S)V
+				L7:	aload_0;
 					aload_2;
 					aload_1;
-					sload 4;
-					invokespecial 53;		// project/demo.writeData([BLjavacard/framework/APDU;S)V
-					goto_w L41;
-				L9:	getfield_b_this 4;		// boolean project/demo.isLocked
-					ifeq L11;
-				L10:	sspush 27010;
-					invokestatic 52;		// javacard/framework/ISOException.throwIt(S)V
-				L11:	aload_0;
+					sload_3;
+					invokespecial 52;		// project/demo.writeData([BLjavacard/framework/APDU;S)V
+					goto_w L42;
+				L8:	getfield_b_this 4;		// boolean project/demo.isLocked
+					ifeq L10;
+				L9:	sspush 27010;
+					invokestatic 51;		// javacard/framework/ISOException.throwIt(S)V
+				L10:	aload_0;
 					aload_2;
 					aload_1;
-					invokespecial 54;		// project/demo.readData([BLjavacard/framework/APDU;)V
-					goto_w L41;
-				L12:	getfield_b_this 4;		// boolean project/demo.isLocked
-					ifeq L14;
-				L13:	sspush 27010;
-					invokestatic 52;		// javacard/framework/ISOException.throwIt(S)V
-				L14:	aload_0;
-					invokespecial 55;		// project/demo.resetData()V
-					goto_w L41;
-				L15:	getfield_b_this 4;		// boolean project/demo.isLocked
-					ifeq L17;
-				L16:	sspush 27010;
-					invokestatic 52;		// javacard/framework/ISOException.throwIt(S)V
-				L17:	aload_0;
+					invokespecial 53;		// project/demo.readData([BLjavacard/framework/APDU;)V
+					goto_w L42;
+				L11:	getfield_b_this 4;		// boolean project/demo.isLocked
+					ifeq L13;
+				L12:	sspush 27010;
+					invokestatic 51;		// javacard/framework/ISOException.throwIt(S)V
+				L13:	aload_0;
+					invokespecial 54;		// project/demo.resetData()V
+					goto_w L42;
+				L14:	getfield_b_this 4;		// boolean project/demo.isLocked
+					ifeq L16;
+				L15:	sspush 27010;
+					invokestatic 51;		// javacard/framework/ISOException.throwIt(S)V
+				L16:	aload_0;
 					aload_1;
-					invokespecial 56;		// project/demo.verify(Ljavacard/framework/APDU;)V
-					goto_w L41;
-				L18:	getfield_b_this 4;		// boolean project/demo.isLocked
-					ifeq L20;
-				L19:	sspush 27010;
-					invokestatic 52;		// javacard/framework/ISOException.throwIt(S)V
+					invokespecial 55;		// project/demo.verify(Ljavacard/framework/APDU;)V
+					goto_w L42;
+				L17:	getfield_b_this 4;		// boolean project/demo.isLocked
+					ifeq L19;
+				L18:	sspush 27010;
+					invokestatic 51;		// javacard/framework/ISOException.throwIt(S)V
+				L19:	aload_0;
+					aload_1;
+					invokespecial 56;		// project/demo.change(Ljavacard/framework/APDU;)V
+					goto_w L42;
 				L20:	aload_0;
-					aload_1;
-					invokespecial 57;		// project/demo.change(Ljavacard/framework/APDU;)V
-					goto_w L41;
-				L21:	aload_0;
 					sconst_1;
 					putfield_b 4;		// boolean project/demo.isLocked
-					goto_w L41;
-				L22:	aload_0;
+					goto_w L42;
+				L21:	aload_0;
 					sconst_0;
 					putfield_b 4;		// boolean project/demo.isLocked
-					goto_w L41;
-				L23:	getfield_b_this 4;		// boolean project/demo.isLocked
-					ifeq L25;
-				L24:	sspush 27010;
-					invokestatic 52;		// javacard/framework/ISOException.throwIt(S)V
+					goto_w L42;
+				L22:	getfield_b_this 4;		// boolean project/demo.isLocked
+					ifeq L24;
+				L23:	sspush 27010;
+					invokestatic 51;		// javacard/framework/ISOException.throwIt(S)V
+				L24:	aload_1;
+					invokevirtual 57;		// javacard/framework/APDU.setIncomingAndReceive()S
+					sstore 4;
 				L25:	aload_2;
 					sconst_2;
 					baload;
@@ -864,22 +859,25 @@
 					sconst_2;
 					baload;
 					sconst_2;
-					if_scmpne L41;
+					if_scmpne L42;
 				L28:	aload_0;
 					aload_1;
-					sload_3;
+					sload 4;
 					invokespecial 62;		// project/demo.set_img(Ljavacard/framework/APDU;S)V
-					goto L41;
+					goto L42;
 				L29:	getfield_b_this 4;		// boolean project/demo.isLocked
 					ifeq L31;
 				L30:	sspush 27010;
-					invokestatic 52;		// javacard/framework/ISOException.throwIt(S)V
-				L31:	aload_2;
+					invokestatic 51;		// javacard/framework/ISOException.throwIt(S)V
+				L31:	aload_1;
+					invokevirtual 57;		// javacard/framework/APDU.setIncomingAndReceive()S
+					sstore 5;
+				L32:	aload_2;
 					sconst_2;
 					baload;
 					sconst_1;
-					if_scmpne L38;
-				L32:	aload_0;
+					if_scmpne L39;
+				L33:	aload_0;
 					getfield_s_this 27;		// short project/demo.imagelen1
 					putfield_s 31;		// short project/demo.lenback1
 					aload_0;
@@ -904,32 +902,32 @@
 					sconst_0;
 					putfield_s 38;		// short project/demo.pointer4
 					getfield_s_this 28;		// short project/demo.imagelen2
-					ifne L34;
-				L33:	aload_0;
+					ifne L35;
+				L34:	aload_0;
 					sconst_1;
 					putfield_s 32;		// short project/demo.lenback2
-				L34:	getfield_s_this 29;		// short project/demo.imagelen3
-					ifne L36;
-				L35:	aload_0;
+				L35:	getfield_s_this 29;		// short project/demo.imagelen3
+					ifne L37;
+				L36:	aload_0;
 					sconst_1;
 					putfield_s 33;		// short project/demo.lenback3
-				L36:	getfield_s_this 30;		// short project/demo.imagelen4
-					ifne L38;
-				L37:	aload_0;
+				L37:	getfield_s_this 30;		// short project/demo.imagelen4
+					ifne L39;
+				L38:	aload_0;
 					sconst_1;
 					putfield_s 34;		// short project/demo.lenback4
-				L38:	aload_2;
+				L39:	aload_2;
 					sconst_2;
 					baload;
 					sconst_2;
-					if_scmpne L41;
-				L39:	aload_0;
+					if_scmpne L42;
+				L40:	aload_0;
 					aload_1;
 					invokespecial 71;		// project/demo.get_img(Ljavacard/framework/APDU;)V
-					goto L41;
-				L40:	sspush 27904;
-					invokestatic 52;		// javacard/framework/ISOException.throwIt(S)V
-				L41:	return;
+					goto L42;
+				L41:	sspush 27904;
+					invokestatic 51;		// javacard/framework/ISOException.throwIt(S)V
+				L42:	return;
 		}
 
 		.method private addPadding([BSS)V {
@@ -980,7 +978,7 @@
 					sconst_1;
 					if_scmpge L2;
 				L1:	sspush 27012;
-					invokestatic 52;		// javacard/framework/ISOException.throwIt(S)V
+					invokestatic 51;		// javacard/framework/ISOException.throwIt(S)V
 				L2:	sload 5;
 					bspush 16;
 					srem;
@@ -1031,7 +1029,7 @@
 					srem;
 					ifeq L2;
 				L1:	sspush 27012;
-					invokestatic 52;		// javacard/framework/ISOException.throwIt(S)V
+					invokestatic 51;		// javacard/framework/ISOException.throwIt(S)V
 				L2:	getfield_a_this 22;		// reference project/demo.cipher
 					aload 6;
 					sconst_1;
@@ -1064,13 +1062,13 @@
 					sconst_0;
 					invokeinterface 3 87 4;		// javacard/security/AESKey
 					aload_2;
-					invokevirtual 51;		// javacard/framework/APDU.setIncomingAndReceive()S
+					invokevirtual 57;		// javacard/framework/APDU.setIncomingAndReceive()S
 					sstore 6;
 				L3:	sload_3;
 					sspush 255;
 					if_scmple L5;
 				L4:	sspush 27268;
-					invokestatic 52;		// javacard/framework/ISOException.throwIt(S)V
+					invokestatic 51;		// javacard/framework/ISOException.throwIt(S)V
 				L5:	sconst_0;
 					sstore 7;
 				L6:	sload 4;
@@ -1165,7 +1163,7 @@
 					invokespecial 73;		// project/demo.encryptData([BS[BSSLjavacard/security/AESKey;)V
 					goto L19;
 				L18:	sspush 27264;
-					invokestatic 52;		// javacard/framework/ISOException.throwIt(S)V
+					invokestatic 51;		// javacard/framework/ISOException.throwIt(S)V
 				L19:	return;
 		}
 
@@ -1280,7 +1278,7 @@
 					invokespecial 75;		// project/demo.sendResponse(Ljavacard/framework/APDU;[BSS)V
 					goto L11;
 				L10:	sspush 27267;
-					invokestatic 52;		// javacard/framework/ISOException.throwIt(S)V
+					invokestatic 51;		// javacard/framework/ISOException.throwIt(S)V
 				L11:	return;
 		}
 
@@ -1300,7 +1298,7 @@
 					sload 6;
 					if_scmple L4;
 				L3:	sspush 26368;
-					invokestatic 52;		// javacard/framework/ISOException.throwIt(S)V
+					invokestatic 51;		// javacard/framework/ISOException.throwIt(S)V
 				L4:	aload_2;
 					sload_3;
 					aload 5;
@@ -1362,7 +1360,7 @@
 					invokevirtual 50;		// javacard/framework/APDU.getBuffer()[B
 					astore_2;
 				L1:	aload_1;
-					invokevirtual 51;		// javacard/framework/APDU.setIncomingAndReceive()S
+					invokevirtual 57;		// javacard/framework/APDU.setIncomingAndReceive()S
 					s2b;
 					sstore_3;
 				L2:	getfield_a_this 14;		// reference project/demo.pin
@@ -1372,13 +1370,13 @@
 					invokevirtual 80;		// project/OwnerPIN.check([BSB)Z
 					ifeq L4;
 				L3:	sspush -28672;
-					invokestatic 52;		// javacard/framework/ISOException.throwIt(S)V
+					invokestatic 51;		// javacard/framework/ISOException.throwIt(S)V
 					goto L5;
 				L4:	sspush 25536;
 					getfield_a_this 14;		// reference project/demo.pin
 					invokevirtual 81;		// project/OwnerPIN.getTriesRemaining()B
 					sadd;
-					invokestatic 52;		// javacard/framework/ISOException.throwIt(S)V
+					invokestatic 51;		// javacard/framework/ISOException.throwIt(S)V
 				L5:	return;
 		}
 
@@ -1392,21 +1390,21 @@
 					invokevirtual 50;		// javacard/framework/APDU.getBuffer()[B
 					astore_2;
 				L1:	aload_1;
-					invokevirtual 51;		// javacard/framework/APDU.setIncomingAndReceive()S
+					invokevirtual 57;		// javacard/framework/APDU.setIncomingAndReceive()S
 					s2b;
 					sstore_3;
 				L2:	sload_3;
 					sconst_4;
 					if_scmpeq L4;
 				L3:	sspush 26368;
-					invokestatic 52;		// javacard/framework/ISOException.throwIt(S)V
+					invokestatic 51;		// javacard/framework/ISOException.throwIt(S)V
 				L4:	getfield_a_this 14;		// reference project/demo.pin
 					aload_2;
 					sconst_5;
 					sload_3;
 					invokevirtual 65;		// project/OwnerPIN.update([BSB)V
 					sspush -28672;
-					invokestatic 52;		// javacard/framework/ISOException.throwIt(S)V
+					invokestatic 51;		// javacard/framework/ISOException.throwIt(S)V
 					return;
 		}
 
@@ -1723,7 +1721,7 @@
 					sconst_1;
 					if_scmpge L2;
 				L1:	sspush 27012;
-					invokestatic 52;		// javacard/framework/ISOException.throwIt(S)V
+					invokestatic 51;		// javacard/framework/ISOException.throwIt(S)V
 				L2:	sload_3;
 					bspush 16;
 					srem;
@@ -1777,7 +1775,7 @@
 					srem;
 					ifeq L2;
 				L1:	sspush 27012;
-					invokestatic 52;		// javacard/framework/ISOException.throwIt(S)V
+					invokestatic 51;		// javacard/framework/ISOException.throwIt(S)V
 				L2:	getfield_a_this 39;		// reference project/AesConfig.cipher
 					aload 4;
 					sconst_1;
@@ -1898,7 +1896,7 @@
 					invokeinterface 1 93 0;		// project/masterInterface
 					ifeq L8;
 				L7:	sspush 27010;
-					invokestatic 52;		// javacard/framework/ISOException.throwIt(S)V
+					invokestatic 51;		// javacard/framework/ISOException.throwIt(S)V
 				L8:	aload_0;
 					invokespecial 94;		// project/rsa.generateKeys()V
 					goto_w L28;
@@ -1906,7 +1904,7 @@
 					invokeinterface 1 93 0;		// project/masterInterface
 					ifeq L11;
 				L10:	sspush 27010;
-					invokestatic 52;		// javacard/framework/ISOException.throwIt(S)V
+					invokestatic 51;		// javacard/framework/ISOException.throwIt(S)V
 				L11:	aload_0;
 					aload_1;
 					invokespecial 95;		// project/rsa.sendModulus(Ljavacard/framework/APDU;)V
@@ -1915,7 +1913,7 @@
 					invokeinterface 1 93 0;		// project/masterInterface
 					ifeq L14;
 				L13:	sspush 27010;
-					invokestatic 52;		// javacard/framework/ISOException.throwIt(S)V
+					invokestatic 51;		// javacard/framework/ISOException.throwIt(S)V
 				L14:	aload_0;
 					aload_1;
 					invokespecial 96;		// project/rsa.sendExponent(Ljavacard/framework/APDU;)V
@@ -1924,7 +1922,7 @@
 					invokeinterface 1 93 0;		// project/masterInterface
 					ifeq L17;
 				L16:	sspush 27010;
-					invokestatic 52;		// javacard/framework/ISOException.throwIt(S)V
+					invokestatic 51;		// javacard/framework/ISOException.throwIt(S)V
 				L17:	aload_0;
 					aload_1;
 					invokespecial 97;		// project/rsa.encryptData(Ljavacard/framework/APDU;)V
@@ -1933,7 +1931,7 @@
 					invokeinterface 1 93 0;		// project/masterInterface
 					ifeq L20;
 				L19:	sspush 27010;
-					invokestatic 52;		// javacard/framework/ISOException.throwIt(S)V
+					invokestatic 51;		// javacard/framework/ISOException.throwIt(S)V
 				L20:	aload_0;
 					aload_1;
 					invokespecial 98;		// project/rsa.decryptData(Ljavacard/framework/APDU;)V
@@ -1942,7 +1940,7 @@
 					invokeinterface 1 93 0;		// project/masterInterface
 					ifeq L23;
 				L22:	sspush 27010;
-					invokestatic 52;		// javacard/framework/ISOException.throwIt(S)V
+					invokestatic 51;		// javacard/framework/ISOException.throwIt(S)V
 				L23:	aload_0;
 					aload_1;
 					invokespecial 99;		// project/rsa.signData(Ljavacard/framework/APDU;)V
@@ -1951,13 +1949,13 @@
 					invokeinterface 1 93 0;		// project/masterInterface
 					ifeq L26;
 				L25:	sspush 27010;
-					invokestatic 52;		// javacard/framework/ISOException.throwIt(S)V
+					invokestatic 51;		// javacard/framework/ISOException.throwIt(S)V
 				L26:	aload_0;
 					aload_1;
 					invokespecial 100;		// project/rsa.verifyData(Ljavacard/framework/APDU;)V
 					goto L28;
 				L27:	sspush 27904;
-					invokestatic 52;		// javacard/framework/ISOException.throwIt(S)V
+					invokestatic 51;		// javacard/framework/ISOException.throwIt(S)V
 				L28:	return;
 		}
 
@@ -2009,7 +2007,7 @@
 				L0:	getfield_a_this 45;		// reference project/rsa.publicKey
 					ifnonnull L2;
 				L1:	sspush 27013;
-					invokestatic 52;		// javacard/framework/ISOException.throwIt(S)V
+					invokestatic 51;		// javacard/framework/ISOException.throwIt(S)V
 				L2:	getfield_a_this 45;		// reference project/rsa.publicKey
 					invokeinterface 1 104 1;		// javacard/security/RSAPublicKey
 					bspush 8;
@@ -2046,7 +2044,7 @@
 				L0:	getfield_a_this 45;		// reference project/rsa.publicKey
 					ifnonnull L2;
 				L1:	sspush 27013;
-					invokestatic 52;		// javacard/framework/ISOException.throwIt(S)V
+					invokestatic 51;		// javacard/framework/ISOException.throwIt(S)V
 				L2:	sconst_3;
 					newarray 11;
 					astore_2;
@@ -2081,7 +2079,7 @@
 					invokevirtual 50;		// javacard/framework/APDU.getBuffer()[B
 					astore_2;
 				L1:	aload_1;
-					invokevirtual 51;		// javacard/framework/APDU.setIncomingAndReceive()S
+					invokevirtual 57;		// javacard/framework/APDU.setIncomingAndReceive()S
 					sstore_3;
 				L2:	aload_1;
 					invokevirtual 77;		// javacard/framework/APDU.setOutgoing()S
@@ -2119,7 +2117,7 @@
 					invokevirtual 50;		// javacard/framework/APDU.getBuffer()[B
 					astore_2;
 				L1:	aload_1;
-					invokevirtual 51;		// javacard/framework/APDU.setIncomingAndReceive()S
+					invokevirtual 57;		// javacard/framework/APDU.setIncomingAndReceive()S
 					sstore_3;
 				L2:	aload_1;
 					invokevirtual 77;		// javacard/framework/APDU.setOutgoing()S
@@ -2157,7 +2155,7 @@
 					invokevirtual 50;		// javacard/framework/APDU.getBuffer()[B
 					astore_2;
 				L1:	aload_1;
-					invokevirtual 51;		// javacard/framework/APDU.setIncomingAndReceive()S
+					invokevirtual 57;		// javacard/framework/APDU.setIncomingAndReceive()S
 					sstore_3;
 				L2:	getfield_a_this 44;		// reference project/rsa.rsaSig
 					getfield_a_this 46;		// reference project/rsa.privateKey
@@ -2195,7 +2193,7 @@
 					invokevirtual 50;		// javacard/framework/APDU.getBuffer()[B
 					astore_2;
 				L1:	aload_1;
-					invokevirtual 51;		// javacard/framework/APDU.setIncomingAndReceive()S
+					invokevirtual 57;		// javacard/framework/APDU.setIncomingAndReceive()S
 					sstore_3;
 				L2:	aload_2;
 					sconst_5;
