@@ -10,7 +10,7 @@ public class demo extends Applet implements masterInterface {
 	private AESKey aesKey;
 	private byte[] template;
 	private byte[] in, enc_buffer, dec_buffer, dec_buffer1, dec_buffer2;
-	private short keyLen;
+	private short keyLen,count;
 	private Encrypt encryptor;
 	// hambam
 	private MessageDigest sha256;
@@ -52,12 +52,12 @@ public class demo extends Applet implements masterInterface {
 	private byte[] image1, image2, image3, image4;
 	private short imagelen1, imagelen2, imagelen3, imagelen4, lenback1, lenback2, lenback3, lenback4, pointer1,
 			pointer2, pointer3, pointer4;
-	public static final short MAX_LENGTH = (short) (0x7FFF);
+	public static final short MAX_LENGTH = (short) 256;
 
 	// Phng thc khi to
 	public demo() {
 		id = new byte[16];
-		name = new byte[16];
+		name = new byte[32];
 		birthdate = new byte[16];
 		gender = 0;
 		address = new byte[96];
@@ -76,7 +76,7 @@ public class demo extends Applet implements masterInterface {
 		keyLen = (short) (KeyBuilder.LENGTH_AES_128 / 8);
 
 		// in = new byte[keyLen];
-		enc_buffer = new byte[keyLen];
+		enc_buffer = new byte[32];
 		dec_buffer = new byte[48];
 		dec_buffer1 = new byte[16];
 		dec_buffer2 = new byte[96];
@@ -85,8 +85,7 @@ public class demo extends Applet implements masterInterface {
 		sha256 = MessageDigest.getInstance(MessageDigest.ALG_MD5, false);
 		sha256.reset();
 		sha256.doFinal(DEFAULT_PIN, (short) 0, (short) DEFAULT_PIN.length, pinHash, (short) 0);
-		aesKey = (AESKey) KeyBuilder.buildKey(KeyBuilder.TYPE_AES_TRANSIENT_RESET, KeyBuilder.LENGTH_AES_128, false);
-        
+		aesKey = (AESKey) KeyBuilder.buildKey(KeyBuilder.TYPE_AES_TRANSIENT_RESET, KeyBuilder.LENGTH_AES_128, false);       
 		cipher = Cipher.getInstance(javacardx.crypto.Cipher.ALG_AES_BLOCK_128_ECB_NOPAD, false);
 		 
 		image1 = new byte[MAX_LENGTH];
@@ -217,7 +216,7 @@ public class demo extends Applet implements masterInterface {
 			ISOException.throwIt(ISO7816.SW_DATA_INVALID);
 		}
 		byte residual = (byte) (length % 16);
-		cipher.init(aesKey, Cipher.MODE_ENCRYPT);
+		cipher.init(aesKey, cipher.MODE_ENCRYPT);
 		if (residual == (byte) 0x00) {
 			cipher.doFinal(input, inputOffset, length, output, (short) 0);
 
@@ -257,8 +256,8 @@ public class demo extends Applet implements masterInterface {
 		switch (tag) {
 
 			case NAME_TAG:
-				encryptData(buffer, offset, name, (short) 0, lc, aesKey);
-
+				// encryptData(buffer, offset, name, (short) 0, lc, aesKey);
+encrypt_AesCipher(apdu,buffer,lc);
 				// while(lc > 0){
 				// Util.arrayCopy(buffer, offset, name, pointer, byteRead);
 				// pointer += byteRead;
@@ -349,11 +348,11 @@ public class demo extends Applet implements masterInterface {
 				break;
 			case NAME_TAG:
 				// // sendResponse(apdu, name, (short)0, (short)name.length);
-				decryptData(name, (short) 0, dec_buffer, (short) 0, (short) name.length, aesKey);
-				// decryptData2(name, (short) 0, dec_buffer, (short) 0, (short)
-				// name.length,aesKey,);
-				sendResponse(apdu, dec_buffer, (short) 0, (short) dec_buffer.length);
-
+				// decryptData(name, (short) 0, enc_buffer, (short) 0, (short) name.length, aesKey);
+			
+				
+			decrypt_AesCipher(apdu,name,(short) 0, dec_buffer, (short) 0);
+			sendResponse(apdu, dec_buffer, (short) 0, (short) dec_buffer.length);
 				break;
 			case BIRTHDATE_TAG:
 
@@ -463,78 +462,259 @@ public class demo extends Applet implements masterInterface {
 	}
 	
 	private void set_img(APDU apdu, short len){
+		aesKey.setKey(pinHash, (short) 0);
         byte[] buf = apdu.getBuffer();
+            byte[] temp = apdu.getBuffer();
+            	short lc = (short) (buf[ISO7816.OFFSET_LC] & 0xFF);
         short offData = (short) (ISO7816.OFFSET_CDATA & 0xFF);
-        if((short)(MAX_LENGTH-imagelen3)<255){
-            Util.arrayCopy(buf, offData, image4, imagelen4, len);
-            imagelen4 += len;
+        if((short)(MAX_LENGTH-imagelen3)<256){
+        	// Util.arrayCopy(buf, offData, image4, imagelen4, len);
+			// encryptData(buf,offData,temp,(short)0,lc,aesKey);
+            // Util.arrayCopy(temp, offData, image4, imagelen4, len);
+				// encrypt_AesCipher(apdu, buf, lc);
+				Util.arrayCopy(buf, offData, image4, imagelen4, len);
+				imagelen4 += len;
+
+            // imagelen4 += len;
         }else{
-            if((short)(MAX_LENGTH-imagelen2)<255){
-                Util.arrayCopy(buf, offData, image3, imagelen3, len);
+            if((short)(MAX_LENGTH-imagelen2)<256){
+            	// Util.arrayCopy(buf, offData, image3, imagelen3, len);
+            	// encryptData(buf,offData,temp,(short)0,lc,aesKey);
+           
+                // Util.arrayCopy(temp, offData, image3, imagelen3, len);
+                 // encrypt_AesCipher(apdu, buf, lc);
+				Util.arrayCopy(buf, offData, image3, imagelen3, len);
+				
                 imagelen3 += len;
             }else{
-                if((short)(MAX_LENGTH-imagelen1)<255){
-                    Util.arrayCopy(buf, offData, image2, imagelen2, len);
-                    imagelen2 += len;
+                if((short)(MAX_LENGTH-imagelen1)<256){
+                	// Util.arrayCopy(buf, offData, image2, imagelen2, len);
+                	// encryptData(buf,offData,temp,(short)0,lc,aesKey);
+                    // Util.arrayCopy(temp, offData, image2, imagelen2, len);
+                   
+                    // encrypt_AesCipher(apdu, buf, lc);
+				Util.arrayCopy(buf, offData, image2, imagelen2, len);
+					imagelen2 += len;
                 }else{
-                    Util.arrayCopy(buf, offData, image1, imagelen1, len);
-                    imagelen1 += len;
+                	// Util.arrayCopy(buf, offData, image1, imagelen1, len);
+                	// encryptData(buf,offData,temp,(short)0,lc,aesKey);
+                    // Util.arrayCopy(temp, offData, image1, imagelen1, len);
+                   
+                    // encrypt_AesCipher(apdu, buf, lc);/
+					Util.arrayCopy(buf, offData, image1, imagelen1, len);
+				 imagelen1 += len;
                 }
             }
         }
     }
 
-    private void get_img(APDU apdu){
-        byte[] buf = apdu.getBuffer();
-        short datalen = 255;
-        if(lenback3==0){
-            if(lenback4 <255){
-                datalen = lenback4;
+    // private void get_img(APDU apdu){
+        // byte[] buf = apdu.getBuffer();
+   
+        // short datalen = 255;
+        // if(lenback3==0){
+            // if(lenback4 <255){
+                // datalen = lenback4;
+            // }
+            // apdu.setOutgoing();
+            // apdu.setOutgoingLength((short)255);
+
+            // Util.arrayCopy(image4, (pointer4), buf, (short)0, datalen);
+            // apdu.sendBytes((short)0, datalen);
+            // pointer4+=  (short)255;
+            // lenback4 -= (short)(255);
+        // }else{
+            // if(lenback2==0){
+                // if(lenback3 <255){
+                    // datalen = lenback3;
+                // }
+                // apdu.setOutgoing();
+                // apdu.setOutgoingLength((short)255);
+                // Util.arrayCopy(image3, (pointer3), buf, (short)0, datalen);
+                // apdu.sendBytes((short)0, datalen);
+                // pointer3+=  (short)255;
+                // lenback3 -= (short)(255);
+            // }else{
+                // if(lenback1==0){
+                    // if(lenback2 <255){
+                        // datalen = lenback2;
+                    // }
+                    // apdu.setOutgoing();
+                    // apdu.setOutgoingLength((short)255);
+                    // Util.arrayCopy(image2, (pointer2), buf, (short)0, datalen);
+                    // apdu.sendBytes((short)0, datalen);
+                    // pointer2+=  (short)255;
+                    // lenback2 -= (short)(255);
+                // }else{
+                    // if(lenback1 <255){
+                        // datalen = lenback1;
+                    // }
+                    // apdu.setOutgoing();
+                    // apdu.setOutgoingLength((short)255);
+                    // Util.arrayCopy(image1, (pointer1), buf, (short)0, datalen);
+                    // apdu.sendBytes((short)0, datalen);
+                    // pointer1+=  (short)255;
+                    // lenback1 -= (short)(255);
+                // }
+            // }
+        // }
+    // }
+     private void encrypt_AesCipher(APDU apdu, byte[] in, short inlen) {
+        try {
+            byte[] buffer = apdu.getBuffer();
+            aesKey.setKey(pinHash, (short)0);//set khoa tu PIN
+            byte mod = Cipher.MODE_ENCRYPT;
+            if(inlen <= 0){ ISOException.throwIt(ISO7816.SW_WRONG_LENGTH);
+            }else if(inlen % 16 == 0){
+                cipher.init(aesKey, mod);
+                cipher.doFinal(in, (short) 0, inlen, in, (short) 0);
+            }else if (inlen <16){
+                byte[] a= new byte[(short)(16-inlen)];
+                for(short i=0; i<(short)(16-inlen);i++){
+                    a[i] = (byte)(i+1);
+                }
+                cipher.init(aesKey, mod);
+                cipher.update(in,(short)0,(short)(inlen),buffer,(short)0);
+                cipher.doFinal(a, (short) 0, (short)(16-inlen), buffer, (short)0);
+                Util.arrayCopy(buffer, (short)0, in, (short)0, (short)16);
+            }else{
+                byte[] b= new byte[16];
+                 count=0;
+                for(short i=0; i<inlen; i++){
+                    b[count] = in[i];
+                    count++;
+                    if(count== 16){
+                        cipher.init(aesKey, mod);
+                       cipher.doFinal(b,(short)0,(short)(b.length),buffer,(short)(i-15));
+                        count = 0;
+                    }
+                    if(i==(short)(inlen-1)){
+                        byte[] a= new byte[(short)(16-count)];
+                        for(short j=0; j<(short)(16-count);j++){
+                            a[j] = (byte)(j+1);
+                        }
+                        cipher.init(aesKey, mod);
+                        cipher.update(b,(short)0,(short)(count),buffer,(short)(i-count+1));
+                        cipher.doFinal(a, (short) 0, (short)(a.length), buffer, (short)(i-count+1));
+                        Util.arrayCopy(buffer, (short)0, in, (short)0, (short)(inlen+16-count));
+                        break;
+                    }
+                }
+            }
+            JCSystem.requestObjectDeletion();
+        }catch (CryptoException e) {
+            short reason = e.getReason();
+            ISOException.throwIt(reason);
+        }
+    }
+    
+    private void decrypt_AesCipher(APDU apdu, byte[] in, short inlen,byte[] out, short offset){
+        byte[] buffer = apdu.getBuffer();
+        byte mod = cipher.MODE_DECRYPT;
+        aesKey.setKey(pinHash, (short)0);
+        if(inlen % 16 == 0){
+            cipher.init(aesKey, mod);
+            cipher.doFinal(in, (short) 0, inlen, out, (short)offset);
+        }else if (inlen <16){
+            cipher.init(aesKey, mod);
+            cipher.doFinal(in, (short) 0, (short)16, buffer, (short)0);
+            Util.arrayCopy(buffer, (short)0, out, (short)offset, (short)inlen);
+        }else{
+            count=0;
+            for(short i=1; i<=inlen; i++){
+                if(i % 16 == 0 ){
+                    count++;
+                    cipher.init(aesKey, mod);
+                    cipher.doFinal(in,(short)(i-16),(short)16,buffer,(short)(i-16));
+                }
+            }
+            cipher.init(aesKey, mod);
+            cipher.doFinal(in, (short)(16*count), (short)16, buffer, (short)(16*count));
+            Util.arrayCopy(buffer, (short)0, out, (short)offset, (short)(inlen));
+        }
+        JCSystem.requestObjectDeletion();
+    }
+
+private  void get_img(APDU apdu) {
+    byte[] buf = apdu.getBuffer();
+
+    short datalen = 0xFF;
+    if (lenback3 == 0) {
+        if (lenback4 < 255) {
+            datalen = lenback4;
+        }
+        apdu.setOutgoing();
+        apdu.setOutgoingLength((short) 255);
+
+        byte[] decryptedData = new byte[datalen];
+        // decryptData(image4, pointer4, decryptedData, (short) 0, datalen, aesKey);
+        // Util.arrayCopy(decryptedData, (short) 0, buf, (short) 0, datalen);
+         // Util.arrayCopy(image4, (pointer4), buf, (short)0, datalen);
+          Util.arrayCopy(image4, (pointer4), buf, (short)0, datalen);
+		// decrypt_AesCipher(apdu, image4, datalen, buf, (short)0);
+
+        apdu.sendBytes((short) 0, datalen);
+        pointer4 += (short) 255;
+        lenback4 -= (short) (255);
+    } else {
+        if (lenback2 == 0) {
+            if (lenback3 < 255) {
+                datalen = lenback3;
             }
             apdu.setOutgoing();
-            apdu.setOutgoingLength((short)255);
-            Util.arrayCopy(image4, (pointer4), buf, (short)0, datalen);
-            apdu.sendBytes((short)0, datalen);
-            pointer4+=  (short)255;
-            lenback4 -= (short)(255);
-        }else{
-            if(lenback2==0){
-                if(lenback3 <255){
-                    datalen = lenback3;
+            apdu.setOutgoingLength((short) 255);
+
+            byte[] decryptedData = new byte[datalen];
+            // decryptData(image3, pointer3, decryptedData, (short) 0, datalen, aesKey);
+            // Util.arrayCopy(decryptedData, (short) 0, buf, (short) 0, datalen);
+            Util.arrayCopy(image3, (pointer3), buf, (short)0, datalen);
+      		// decrypt_AesCipher(apdu, image3, datalen, buf, (short)0);
+
+            apdu.sendBytes((short) 0, datalen);
+            pointer3 += (short) 255;
+            lenback3 -= (short) (255);
+        } else {
+            if (lenback1 == 0) {
+                if (lenback2 < 255) {
+                    datalen = lenback2;
+                }
+                apdu.setOutgoing();
+                apdu.setOutgoingLength((short) 255);
+
+                byte[] decryptedData = new byte[datalen];
+                // decryptData(image2, pointer2, decryptedData, (short) 0, datalen, aesKey);
+                // Util.arrayCopy(decryptedData, (short) 0, buf, (short) 0, datalen);
+                // Util.arrayCopy(image2, (pointer2), buf, (short)0, datalen);
+               Util.arrayCopy(image2, (pointer2), buf, (short)0, datalen);
+				// decrypt_AesCipher(apdu, image2, datalen, buf, (short)0);
+
+                apdu.sendBytes((short) 0, datalen);
+                pointer2 += (short) 255;
+                lenback2 -= (short) (255);
+            } else {
+                if (lenback1 < 255) {
+                    datalen = lenback1;
                 }
                 apdu.setOutgoing();
                 apdu.setOutgoingLength((short)255);
-                Util.arrayCopy(image3, (pointer3), buf, (short)0, datalen);
-                apdu.sendBytes((short)0, datalen);
-                pointer3+=  (short)255;
-                lenback3 -= (short)(255);
-            }else{
-                if(lenback1==0){
-                    if(lenback2 <255){
-                        datalen = lenback2;
-                    }
-                    apdu.setOutgoing();
-                    apdu.setOutgoingLength((short)255);
-                    Util.arrayCopy(image2, (pointer2), buf, (short)0, datalen);
-                    apdu.sendBytes((short)0, datalen);
-                    pointer2+=  (short)255;
-                    lenback2 -= (short)(255);
-                }else{
-                    if(lenback1 <255){
-                        datalen = lenback1;
-                    }
-                    apdu.setOutgoing();
-                    apdu.setOutgoingLength((short)255);
-                    Util.arrayCopy(image1, (pointer1), buf, (short)0, datalen);
-                    apdu.sendBytes((short)0, datalen);
-                    pointer1+=  (short)255;
-                    lenback1 -= (short)(255);
-                }
+
+                byte[] decryptedData = new byte[datalen];
+                // decryptData(image1, pointer1, decryptedData, (short) 0, datalen, aesKey);
+               // Util.arrayCopy(decryptedData, (short) 0, buf, (short) 0, datalen);
+             Util.arrayCopy(image1, (pointer1), buf, (short)0, datalen);
+              
+				// Util.arrayCopy(image1, (pointer1), buf, (short)0, datalen);
+				// decrypt_AesCipher(apdu, image1, datalen, buf, (short)0);
+                apdu.sendBytes((short) 0, datalen);
+                pointer1 += (short) 255;
+                lenback1 -= (short) (255);
             }
         }
     }
+}
 
-	
+
+
 	public Shareable getShareableInterfaceObject (AID clientAID, byte parameter){
 		
 		// xacs thuc nguoi dungf
